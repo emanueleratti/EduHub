@@ -1,0 +1,40 @@
+.button-lg {
+  padding: 14px 40px !important;
+  width: fit-content !important;
+  border-radius: 100px !important;
+  font-size: 1.4rem !important;
+  font-weight: 500 !important;
+}
+.button-md {
+  padding: 9px 30px !important;
+  width: fit-content !important;
+  border-radius: 50px !important;
+  font-size: 1.2rem !important;
+  font-weight: 500 !important;
+}
+
+.button-sm {
+  padding: 7px 20px !important;
+  width: fit-content !important;
+  border-radius: 25px !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+}
+
+.filled-black {
+  background-color: var(--black);
+  border: none !important;
+  color: var(--white);
+}
+
+.filled-white {
+  background-color: var(--white);
+  border: none !important;
+  color: var(--black);
+}
+
+.filled-gradient {
+  background: var(--gradient);
+  color: var(--white);
+  border: none !important;
+}

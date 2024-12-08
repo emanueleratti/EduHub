@@ -1,0 +1,18 @@
+.row-bordered {
+  border-top: 2px solid var(--black);
+  margin-bottom: -2px;
+}
+
+.row-bordered {
+  border-bottom: 2px solid var(--black);
+}
+
+.icon-link i {
+  color: var(--secondary);
+  transition: all 0.3s ease-in-out;
+}
+
+.icon-link:hover i {
+  color: var(--primary);
+  scale: 1.2;
+}

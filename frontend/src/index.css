@@ -1,0 +1,281 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap");
+
+/* VARIABLE COLOR */
+:root {
+  --black: #000000;
+  --dk-grey: #424242;
+  --md-grey: #797979;
+  --grey: #dbdbdb;
+  --lg-grey: #f7f7f7;
+  --white: #ffffff;
+  --primary: #9800fe;
+  --secondary: #fc003e;
+  --gradient: linear-gradient(to bottom, #9800fe, #fc003e);
+}
+
+/* COLOR */
+.black {
+  color: var(--black) !important;
+}
+.dk-grey {
+  color: var(--dk-grey) !important;
+}
+.md-grey {
+  color: var(--md-grey) !important  ;
+}
+.grey {
+  color: var(--grey) !important ;
+}
+.lg-grey {
+  color: var(--lg-grey) !important;
+}
+.white {
+  color: var(--white) !important  ;
+}
+.primary {
+  color: var(--primary) !important;
+}
+.secondary {
+  color: var(--secondary) !important;
+}
+
+/* BACKGROUND COLOR */
+.black-bg {
+  background-color: var(--black) !important;
+}
+.dk-grey-bg {
+  background-color: var(--dk-grey) !important;
+}
+.md-grey-bg {
+  background-color: var(--md-grey) !important;
+}
+.grey-bg {
+  background-color: var(--grey) !important;
+}
+.lg-grey-bg {
+  background-color: var(--lg-grey) !important;
+}
+.white-bg {
+  background-color: var(--white) !important;
+}
+.primary-bg {
+  background-color: var(--primary) !important;
+}
+.secondary-bg {
+  background-color: var(--secondary) !important;
+}
+.gradient-bg {
+  background: var(--gradient) !important;
+}
+
+/* HEADING */
+h1 {
+  font-size: 5rem !important;
+  line-height: 4.5rem !important;
+  font-weight: 300 !important;
+  margin: 0 !important;
+}
+h2 {
+  font-size: 6rem !important  ;
+  line-height: 7.2rem !important;
+  font-weight: 500 !important;
+  margin: 0 !important;
+}
+h3 {
+  font-size: 5rem !important;
+  line-height: 6rem !important;
+  font-weight: 400 !important;
+  margin: 0 !important;
+}
+h4 {
+  font-size: 2.2rem !important;
+  line-height: 2.6rem !important;
+  font-weight: 300 !important;
+  margin: 0 !important;
+}
+h5 {
+  font-size: 1.2rem !important;
+  line-height: 1.4rem !important;
+  font-weight: 600 !important;
+  margin: 0 !important;
+}
+h6 {
+  font-size: 1.2rem !important;
+  line-height: 1.4rem !important;
+  font-weight: 400 !important;
+  margin: 0 !important;
+}
+p {
+  font-size: 1.2rem;
+  line-height: 1.4rem;
+  font-weight: 300;
+  margin: 0 !important;
+}
+a {
+  text-decoration: none !important;
+  color: inherit !important;
+  font-size: 1.2rem;
+  line-height: 1.4rem;
+  font-weight: 300;
+}
+
+/* BODY */
+.lg {
+  font-size: 1.8rem !important;
+  line-height: 2.2rem !important;
+  font-weight: 300 !important;
+}
+.md {
+  font-size: 1.4rem !important;
+  line-height: 1.6rem !important;
+  font-weight: 300 !important;
+}
+.sm {
+  font-size: 1rem !important;
+  line-height: 1.5rem !important;
+  font-weight: 400 !important;
+}
+.underline {
+  text-decoration: underline;
+}
+.bold {
+  font-weight: 600 !important;
+}
+
+/* ICONS */
+.icon-lg {
+  font-size: 6rem;
+}
+.icon-sm {
+  font-size: 2rem;
+}
+.icon-xs {
+  font-size: 1.3rem;
+}
+/* GENERAL */
+* {
+  font-family: "Inter", sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+.first-section {
+  margin-top: -74px !important;
+}
+a:hover {
+  opacity: 0.8;
+}
+.no-resize {
+  resize: none !important;
+}
+.menu {
+  font-size: 1.1rem;
+  line-height: 1.3rem;
+  font-weight: 600;
+}
+.submenu {
+  font-size: 0.9rem;
+  line-height: 1.1rem;
+  font-weight: 500;
+}
+.logo {
+  font-size: 1.75rem;
+  line-height: 2.1rem;
+  font-weight: 600;
+}
+.line {
+  width: 100%;
+  height: 2px;
+}
+.line-small {
+  width: 75px;
+  height: 2px;
+}
+
+/* SCROLLTEXT */
+.scroll-container {
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.scrolltext {
+  font-size: 8rem;
+  line-height: 9.6rem;
+  font-weight: 600;
+  color: var(--black);
+  display: inline-block;
+  animation: scroll 10s linear infinite;
+  -webkit-animation: scroll 10s linear infinite;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@-webkit-keyframes scroll {
+  0% {
+    -webkit-transform: translateX(100%);
+    transform: translateX(100%);
+  }
+  100% {
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+  }
+}
+
+/* CUSTOM BOOTSTRAP */
+.gap-6 {
+  gap: 4.5rem !important;
+}
+.gap-7 {
+  gap: 6rem !important;
+}
+.p-6 {
+  padding: 4.5rem !important;
+}
+.p-7 {
+  padding: 6rem !important;
+}
+.pb-6 {
+  padding-bottom: 4.5rem !important;
+}
+.pb-7 {
+  padding-bottom: 6rem !important;
+}
+.pt-6 {
+  padding-top: 4.5rem !important;
+}
+.pt-7 {
+  padding-top: 6rem !important;
+}
+.py-6 {
+  padding-top: 4.5rem !important;
+  padding-bottom: 4.5rem !important;
+}
+.py-7 {
+  padding-top: 6rem !important;
+  padding-bottom: 6rem !important;
+}
+.px-6 {
+  padding-left: 4.5rem !important;
+  padding-right: 4.5rem !important;
+}
+.px-7 {
+  padding-left: 6rem !important;
+  padding-right: 6rem !important;
+}
+
+/* FORM */
+.description {
+  padding-top: 14px !important;
+  padding-right: 26px !important;
+}
+.image-preview {
+  margin-top: 8px !important;
+}

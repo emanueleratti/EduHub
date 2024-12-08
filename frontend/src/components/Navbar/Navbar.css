@@ -1,0 +1,10 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background-color: rgba(240, 240, 240, 0.8);
+}
+
+nav a:hover {
+  color: var(--secondary) !important;
+}
