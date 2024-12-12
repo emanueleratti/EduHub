@@ -1,7 +1,7 @@
 const express = require("express");
 const coursesPage = express.Router();
-const coursesPageSchema = require("../models/coursesPageSchema");
-const coursesPageValidator = require("../middlewares/validators/coursesPageValidator");
+const coursesSchema = require("../models/coursesSchema");
+const coursesValidator = require("../middlewares/validators/coursesValidator");
 
 const createDefaultCoursesPage = async () => {
   const defaultCoursesPage = {
@@ -23,9 +23,9 @@ const createDefaultCoursesPage = async () => {
     ],
   };
 
-  const existingCoursesPage = await coursesPageSchema.findOne();
+  const existingCoursesPage = await coursesSchema.findOne();
   if (!existingCoursesPage) {
-    const coursesPage = new coursesPageSchema(defaultCoursesPage);
+    const coursesPage = new coursesSchema(defaultCoursesPage);
     await coursesPage.save();
   }
 };
@@ -38,7 +38,7 @@ coursesPage.use(async (request, response, next) => {
 // GET
 coursesPage.get("/", async (request, response, next) => {
   try {
-    const coursesPage = await coursesPageSchema.findOne();
+    const coursesPage = await coursesSchema.findOne();
     response.status(200).send({
       statusCode: 200,
       message: "CoursesPage caricata correttamente",
@@ -52,10 +52,10 @@ coursesPage.get("/", async (request, response, next) => {
 // PATCH
 coursesPage.patch(
   "/update",
-  // coursesPageValidator,
+  // coursesValidator,
   async (request, response, next) => {
     try {
-      const coursesPage = await coursesPageSchema.findOneAndUpdate(
+      const coursesPage = await coursesSchema.findOneAndUpdate(
         {},
         request.body,
         {

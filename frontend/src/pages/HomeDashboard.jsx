@@ -1,74 +1,37 @@
-import { Container, Row, Col } from "react-bootstrap";
-import { useEffect } from "react";
-import axios from "axios";
 import { useAtom } from "jotai";
 import {
-  homePageAtom,
   homePageDataAtom,
+  homePageAtom,
+  homePageActionsAtom,
   isLoadingAtom,
 } from "../stateManager/atom";
-import { handleError } from "../utility/errorHandler";
-import { handleNotification } from "../utility/notificationHandler";
+import { useEffect } from "react";
+import { Container, Row, Col } from "react-bootstrap";
 import { CustomButton } from "../components/CustomButtons/CustomButton";
 import { InputText } from "../components/InputFields/InputText";
 import { InputImg } from "../components/InputFields/InputImg";
 import { Dashboard } from "../components/Navbar/Dashboard";
 
-export const HomePageDashboard = () => {
-  const [homePageData, setHomePageData] = useAtom(homePageDataAtom);
-  const [homePage, setHomePage] = useAtom(homePageAtom);
-  const [loading, setLoading] = useAtom(isLoadingAtom);
-
-  const getHomePageData = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(`${import.meta.env.VITE_URL}/homePage`);
-      setHomePage(response.data.homePage);
-      setHomePageData(response.data.homePage);
-    } catch (error) {
-      handleError(error, "Errore durante il caricamento dei dati");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getHomePageData();
-  }, []);
-
-  const handleChangeInput = (event) => {
-    const { name, value } = event.target;
-    setHomePage({ ...homePage, [name]: value });
-  };
-
-  // const handleChangeFile = (event) => {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onloadend = () => {
-  //       onChange(reader.result);
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
+export const HomeDashboard = () => {
+  const [homePage] = useAtom(homePageAtom);
+  const [homePageData] = useAtom(homePageDataAtom);
+  const [loading] = useAtom(isLoadingAtom);
+  const [, homeCRUD] = useAtom(homePageActionsAtom);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setLoading(true);
-
-    try {
-      const response = await axios.patch(
-        `${import.meta.env.VITE_URL}/homePage/update`,
-        homePage
-      );
-      setHomePageData(response.data);
-      handleNotification("HomePage aggiornata correttamente!");
-    } catch (error) {
-      handleError(error, "Errore durante l'aggiornamento");
-    } finally {
-      setLoading(false);
-    }
+    await homeCRUD({ type: "PATCH" });
+    homeCRUD({ type: "GET" });
   };
+
+  const handleChangeInput = (event) => {
+    const { name, value } = event.target;
+    homeCRUD({ type: "PATCH_FIELD", payload: { name, value } });
+  };
+
+  useEffect(() => {
+    homeCRUD({ type: "GET" });
+  }, []);
 
   return (
     <Container fluid>
@@ -90,7 +53,6 @@ export const HomePageDashboard = () => {
                   handleSubmit={handleSubmit}
                 />
               </Col>
-
               {/* FIRST SECTION */}
               <Col className="pt-4 pb-2 px-4 lg-grey-bg d-flex flex-column gap-4">
                 <p className="mid bold primary">FIRST SECTION</p>
@@ -143,8 +105,7 @@ export const HomePageDashboard = () => {
                   preview={homePageData.sloganTitle}
                 />
               </Col>
-
-              {/* SLOGAN SECTION */}
+              {/* SECOND SECTION */}
               <Col className="pt-4 pb-2 px-4 lg-grey-bg d-flex flex-column gap-4">
                 <p className="mid bold primary">SECOND SECTION</p>
                 <InputText

@@ -1,36 +1,31 @@
-import React from "react";
-import axios from "axios";
+import { useAtom } from "jotai";
+import {
+  coursesPageDataAtom,
+  coursesPageActionsAtom,
+  categoriesPageDataAtom,
+  categoriesPageActionsAtom,
+} from "../stateManager/atom";
+import { useEffect } from "react";
 import { PageLayout } from "../layout/PageLayout";
 import { Container, Row, Col } from "react-bootstrap";
-import { useAtom } from "jotai";
-import { useEffect } from "react";
-import { coursesPageDataAtom } from "../stateManager/atom";
-import { TitleLink } from "../components/Elements/TitleLink";
 import { Cover } from "../components/ImageContainer/Cover";
+import { TitleLink } from "../components/Elements/TitleLink";
 
 export const CoursesPage = () => {
-  const [coursesPageData, setCoursesPageData] = useAtom(coursesPageDataAtom);
-
-  const getCoursesPageData = async () => {
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_URL}/coursesPage`
-      );
-      setCoursesPageData(response.data.coursesPage);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const [coursesPageData] = useAtom(coursesPageDataAtom);
+  const [categoriesPageData] = useAtom(categoriesPageDataAtom);
+  const [, getCourses] = useAtom(coursesPageActionsAtom);
+  const [, getCategories] = useAtom(categoriesPageActionsAtom);
 
   useEffect(() => {
-    getCoursesPageData();
-  }, [setCoursesPageData]);
+    getCourses({ type: "GET" });
+    getCategories({ type: "GET" });
+  }, []);
 
   return (
     <PageLayout>
       {/* HERO IMAGE */}
       <Cover height="500px" image={coursesPageData?.heroImage} />
-
       {/* SLOGAN */}
       <Container fluid className="bg-black py-6">
         <Container>
@@ -41,7 +36,6 @@ export const CoursesPage = () => {
           </Row>
         </Container>
       </Container>
-
       {/* ICONS */}
       <Container className="pt-6">
         <Row>
@@ -59,7 +53,6 @@ export const CoursesPage = () => {
           </Col>
         </Row>
       </Container>
-
       {/* FIRST DESCRIPTION */}
       <Container className="py-6">
         <Row>
@@ -70,15 +63,17 @@ export const CoursesPage = () => {
           </Col>
         </Row>
       </Container>
-
       {/* CATEGORIES */}
       <Container className="pb-7 d-flex flex-column">
-        <TitleLink title={"Standard"} icon="ri-arrow-right-line" link="#" />
-        <TitleLink title={"Standard"} icon="ri-arrow-right-line" link="#" />
-        <TitleLink title={"Standard"} icon="ri-arrow-right-line" link="#" />
-        <TitleLink title={"Standard"} icon="ri-arrow-right-line" link="#" />
+        {categoriesPageData.map((category) => (
+          <TitleLink
+            key={category._id}
+            title={category.title}
+            icon="ri-arrow-right-line"
+            link={`/dashboard/categories/${category.slug}`}
+          />
+        ))}
       </Container>
-
       {/* GALLERY SLIDER */}
     </PageLayout>
   );

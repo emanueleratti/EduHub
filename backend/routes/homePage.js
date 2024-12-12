@@ -1,7 +1,7 @@
 const express = require("express");
 const homePage = express.Router();
-const homePageSchema = require("../models/homePageSchema");
-const homePageValidator = require("../middlewares/validators/homePageValidator");
+const homeSchema = require("../models/homeSchema");
+const homeValidator = require("../middlewares/validators/homeValidator");
 
 const createDefaultHomePage = async () => {
   const defaultHomePage = {
@@ -28,9 +28,9 @@ const createDefaultHomePage = async () => {
     ctaLink: "/corsi",
   };
 
-  const existingHomePage = await homePageSchema.findOne();
+  const existingHomePage = await homeSchema.findOne();
   if (!existingHomePage) {
-    const homePage = new homePageSchema(defaultHomePage);
+    const homePage = new homeSchema(defaultHomePage);
     await homePage.save();
   }
 };
@@ -43,7 +43,7 @@ homePage.use(async (request, response, next) => {
 // GET
 homePage.get("/", async (request, response, next) => {
   try {
-    const homePage = await homePageSchema.findOne();
+    const homePage = await homeSchema.findOne();
     response.status(200).send({
       statusCode: 200,
       message: "HomePage caricata correttamente",
@@ -57,10 +57,10 @@ homePage.get("/", async (request, response, next) => {
 // PATCH
 homePage.patch(
   "/update",
-  // homePageValidator,
+  // homeValidator,
   async (request, response, next) => {
     try {
-      const homePage = await homePageSchema.findOneAndUpdate({}, request.body, {
+      const homePage = await homeSchema.findOneAndUpdate({}, request.body, {
         new: true,
         runValidators: true,
       });

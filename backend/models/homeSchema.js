@@ -1,39 +1,17 @@
 const mongoose = require("mongoose");
 
-const coursesPageSchema = new mongoose.Schema({
-  heroImage: {
+const homeSchema = new mongoose.Schema({
+  heroSlider: [
+    {
+      type: String,
+      required: true,
+    },
+  ],
+  firstIncipit: {
     type: String,
     required: true,
   },
-  sloganTitle: {
-    type: String,
-    required: true,
-  },
-  iconFirstNumber: {
-    type: String,
-    required: true,
-  },
-  iconFirstTitle: {
-    type: String,
-    required: true,
-  },
-  iconSecondNumber: {
-    type: String,
-    required: true,
-  },
-  iconSecondTitle: {
-    type: String,
-    required: true,
-  },
-  iconThirdNumber: {
-    type: String,
-    required: true,
-  },
-  iconThirdTitle: {
-    type: String,
-    required: true,
-  },
-  firstSubtitle: {
+  logo: {
     type: String,
     required: true,
   },
@@ -41,12 +19,38 @@ const coursesPageSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  gallerySlider: [
-    {
-      type: String,
-      required: true,
-    },
-  ],
+  sloganSubtitle: {
+    type: String,
+    required: true,
+  },
+  sloganTitle: {
+    type: String,
+    required: true,
+  },
+  secondDescription: {
+    type: String,
+    required: true,
+  },
+  scrollText: {
+    type: String,
+    required: true,
+  },
+  ctaTitle: {
+    type: String,
+    required: true,
+  },
+  ctaDescription: {
+    type: String,
+    required: true,
+  },
+  ctaButton: {
+    type: String,
+    required: true,
+  },
+  ctaLink: {
+    type: String,
+    required: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
@@ -57,8 +61,4 @@ const coursesPageSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model(
-  "coursesPageSchema",
-  coursesPageSchema,
-  "coursespage"
-);
+module.exports = mongoose.model("homeSchema", homeSchema, "homepage");

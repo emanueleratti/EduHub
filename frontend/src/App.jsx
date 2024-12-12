@@ -2,9 +2,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HomePage } from "./pages/HomePage";
-import { HomePageDashboard } from "./pages/HomePageDashboard";
+import { HomeDashboard } from "./pages/HomeDashboard";
 import { CoursesPage } from "./pages/CoursesPage";
-import { CoursesPageDashboard } from "./pages/CoursesPageDashboard";
+import { CoursesDashboard } from "./pages/CoursesDashboard";
+import { CategoriesPage } from "./pages/CategoriesPage";
+import { CategoriesDashboard } from "./pages/CategoriesDashboard";
 
 export const App = () => {
   return (
@@ -12,8 +14,10 @@ export const App = () => {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/corsi" element={<CoursesPage />} />
-        <Route path="/dashboard/homepage" element={<HomePageDashboard />} />
-        <Route path="/dashboard/courses" element={<CoursesPageDashboard />} />
+        <Route path="/categorie" element={<CategoriesPage />} />
+        <Route path="/dashboard/homepage" element={<HomeDashboard />} />
+        <Route path="/dashboard/courses" element={<CoursesDashboard />} />
+        <Route path="/dashboard/categories" element={<CategoriesDashboard />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,76 +1,37 @@
-import { Container, Row, Col } from "react-bootstrap";
-import { useEffect } from "react";
-import axios from "axios";
 import { useAtom } from "jotai";
 import {
   coursesPageAtom,
   coursesPageDataAtom,
   isLoadingAtom,
+  coursesPageActionsAtom,
 } from "../stateManager/atom";
-import { handleError } from "../utility/errorHandler";
-import { handleNotification } from "../utility/notificationHandler";
+import { useEffect } from "react";
+import { Container, Row, Col } from "react-bootstrap";
 import { CustomButton } from "../components/CustomButtons/CustomButton";
 import { InputText } from "../components/InputFields/InputText";
 import { InputImg } from "../components/InputFields/InputImg";
 import { Dashboard } from "../components/Navbar/Dashboard";
 
-export const CoursesPageDashboard = () => {
-  const [coursesPageData, setCoursesPageData] = useAtom(coursesPageDataAtom);
-  const [coursesPage, setCoursesPage] = useAtom(coursesPageAtom);
-  const [loading, setLoading] = useAtom(isLoadingAtom);
-
-  const getCoursesPageData = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(
-        `${import.meta.env.VITE_URL}/coursesPage`
-      );
-      setCoursesPage(response.data.coursesPage);
-      setCoursesPageData(response.data.coursesPage);
-    } catch (error) {
-      handleError(error, "Errore durante il caricamento dei dati");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getCoursesPageData();
-  }, []);
-
-  const handleChangeInput = (event) => {
-    const { name, value } = event.target;
-    setCoursesPage({ ...coursesPage, [name]: value });
-  };
-
-  // const handleChangeFile = (event) => {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onloadend = () => {
-  //       onChange(reader.result);
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
+export const CoursesDashboard = () => {
+  const [coursesPage] = useAtom(coursesPageAtom);
+  const [coursesPageData] = useAtom(coursesPageDataAtom);
+  const [loading] = useAtom(isLoadingAtom);
+  const [, coursesCRUD] = useAtom(coursesPageActionsAtom);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setLoading(true);
-
-    try {
-      const response = await axios.patch(
-        `${import.meta.env.VITE_URL}/coursesPage/update`,
-        coursesPage
-      );
-      setCoursesPageData(response.data.coursesPage);
-      handleNotification("CoursesPage aggiornata correttamente!");
-    } catch (error) {
-      handleError(error, "Errore durante l'aggiornamento");
-    } finally {
-      setLoading(false);
-    }
+    await coursesCRUD({ type: "PATCH" });
+    coursesCRUD({ type: "GET" });
   };
+
+  const handleChangeInput = (event) => {
+    const { name, value } = event.target;
+    coursesCRUD({ type: "PATCH_FIELD", payload: { name, value } });
+  };
+
+  useEffect(() => {
+    coursesCRUD({ type: "GET" });
+  }, []);
 
   return (
     <Container fluid>

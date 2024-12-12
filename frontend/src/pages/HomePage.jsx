@@ -1,37 +1,18 @@
-import React from "react";
-import axios from "axios";
-import { PageLayout } from "../layout/PageLayout";
-import { Slider } from "../components/ImageContainer/Slider";
-import { Container, Row, Col } from "react-bootstrap";
 import { useAtom } from "jotai";
+import { homePageDataAtom, homePageActionsAtom } from "../stateManager/atom";
 import { useEffect } from "react";
-import {
-  homePageDataAtom,
-  homePageAtom,
-  isLoadingAtom,
-} from "../stateManager/atom";
+import { PageLayout } from "../layout/PageLayout";
+import { Container, Row, Col } from "react-bootstrap";
+import { Slider } from "../components/ImageContainer/Slider";
+import { CustomButton } from "../components/CustomButtons/CustomButton";
 
 export const HomePage = () => {
-  const [homePageData, setHomePageData] = useAtom(homePageDataAtom);
-  const [loading, setLoading] = useAtom(isLoadingAtom);
-
-  const getHomePageData = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(`${import.meta.env.VITE_URL}/homePage`);
-      setHomePageData(response.data.homePage);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  console.log(homePageData);
+  const [homePageData] = useAtom(homePageDataAtom);
+  const [, getHomePage] = useAtom(homePageActionsAtom);
 
   useEffect(() => {
-    getHomePageData();
-  }, [setHomePageData]);
+    getHomePage({ type: "GET" });
+  }, []);
 
   return (
     <PageLayout className="first-section">
@@ -80,12 +61,9 @@ export const HomePage = () => {
               <p className="black lg text-center px-7">
                 {homePageData?.ctaDescription}
               </p>
-              <a
-                href={homePageData?.ctaLink}
-                className="btn lg bold btn-lg white gradient-bg mt-3"
-              >
+              <CustomButton size="lg" style="filled-gradient">
                 {homePageData?.ctaButton}
-              </a>
+              </CustomButton>
             </Col>
           </Row>
         </Container>

@@ -12,6 +12,7 @@ const server = express();
 // Routes
 const homePage = require("./routes/homePage");
 const coursesPage = require("./routes/coursesPage");
+const categoriesPage = require("./routes/categoriesPage");
 
 // Middlewares
 server.use(express.json());
@@ -22,6 +23,7 @@ server.use(errorHandler);
 // Routes
 server.use("/homePage", homePage);
 server.use("/coursesPage", coursesPage);
+server.use("/categoriesPage", categoriesPage);
 init();
 
 server.listen(PORT, () => {
