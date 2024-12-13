@@ -42,7 +42,19 @@ const courseSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-    programListItems: [
+    programFirstListItems: [
+      {
+        type: String,
+        required: true,
+      },
+    ],
+    programSecondListItems: [
+      {
+        type: String,
+        required: true,
+      },
+    ],
+    programThirdListItems: [
       {
         type: String,
         required: true,

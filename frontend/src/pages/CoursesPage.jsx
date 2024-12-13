@@ -65,12 +65,12 @@ export const CoursesPage = () => {
       </Container>
       {/* CATEGORIES */}
       <Container className="pb-7 d-flex flex-column">
-        {categoriesPageData.map((category) => (
+        {categoriesPageData.map((category, index) => (
           <TitleLink
-            key={category._id}
+            key={index}
             title={category.title}
             icon="ri-arrow-right-line"
-            link={`/dashboard/categories/${category.slug}`}
+            link={`/corsi/${category.slug}`}
           />
         ))}
       </Container>

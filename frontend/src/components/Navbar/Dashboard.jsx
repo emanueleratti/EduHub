@@ -5,14 +5,19 @@ import logo from "../../assets/eduhub-black.png";
 import {
   categoriesPageDataAtom,
   categoriesPageActionsAtom,
+  coursePageDataAtom,
+  coursePageActionsAtom,
 } from "../../stateManager/atom";
 
 export const Dashboard = () => {
   const [categoriesPageData] = useAtom(categoriesPageDataAtom);
   const [, getCategories] = useAtom(categoriesPageActionsAtom);
+  const [coursePageData] = useAtom(coursePageDataAtom);
+  const [, getCourse] = useAtom(coursePageActionsAtom);
 
   useEffect(() => {
     getCategories({ type: "GET" });
+    getCourse({ type: "GET" });
   }, []);
 
   return (
@@ -28,27 +33,36 @@ export const Dashboard = () => {
         <a className="bold" href="/dashboard/courses">
           COURSES
         </a>
-
         <div className="d-flex flex-column gap-2">
           <a className="bold" href="/dashboard/categories">
             CATEGORIES
           </a>
-          <div className="d-flex flex-column gap-2 ps-3">
+          <ul className="d-flex flex-column gap-2 ps-3 mb-0">
             {categoriesPageData &&
-              categoriesPageData.map((category) => (
-                <a
-                  key={category._id}
-                  className="bold submenu"
-                  href={`/dashboard/categories/${category.slug}`}
-                >
-                  {category.title.toUpperCase()}
-                </a>
+              categoriesPageData.map((category, index) => (
+                <li key={index}>
+                  <a className="bold submenu secondary">
+                    {category.title.toUpperCase()}
+                  </a>
+                </li>
               ))}
-          </div>
+          </ul>
         </div>
-        <a className="bold" href="/dashboard/course">
-          COURSE
-        </a>
+        <div className="d-flex flex-column gap-2">
+          <a className="bold" href="/dashboard/course">
+            COURSE
+          </a>
+          <ul className="d-flex flex-column gap-2 ps-3">
+            {coursePageData &&
+              coursePageData.map((course, index) => (
+                <li key={index}>
+                  <a className="bold submenu secondary">
+                    {course.title.toUpperCase()}
+                  </a>
+                </li>
+              ))}
+          </ul>
+        </div>
       </nav>
     </Col>
   );

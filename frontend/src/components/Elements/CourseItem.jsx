@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { CustomButton } from "../CustomButtons/CustomButton";
-import { NewInputText } from "../Elements/NewInputText";
-import { NewInputImg } from "../Elements/NewInputImg";
+import { NewInputText } from "./NewInputText";
+import { NewInputImg } from "./NewInputImg";
 
-export const CategoryItem = ({ category, handleDelete, handleUpdate }) => {
+export const CourseItem = ({ course, handleDelete, handleUpdate }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [updateCategory, setUpdateCategory] = useState(category);
+  const [updateCourse, setUpdateCourse] = useState(course);
 
   const handleChangeInput = (event) => {
     const { name, value } = event.target;
-    setUpdateCategory((prev) => ({
+    setUpdateCourse((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -18,7 +18,7 @@ export const CategoryItem = ({ category, handleDelete, handleUpdate }) => {
 
   const handleSubmit = async () => {
     try {
-      await handleUpdate(category._id, updateCategory);
+      await handleUpdate(course._id, updateCourse);
       setIsEditing(false);
     } catch (error) {
       console.error("Submit update error:", error);
@@ -27,7 +27,7 @@ export const CategoryItem = ({ category, handleDelete, handleUpdate }) => {
 
   const handleEdit = () => {
     setIsEditing(!isEditing);
-    setUpdateCategory(category);
+    setUpdateCourse(course);
   };
 
   return (
@@ -35,8 +35,8 @@ export const CategoryItem = ({ category, handleDelete, handleUpdate }) => {
       <Row className="d-flex flex-column gap-5">
         <Col className="py-3 px-4 lg-grey-bg d-flex justify-content-between align-items-center">
           <div className="d-flex gap-3 flex-column">
-            <p className="sm bold secondary">CATEGORY</p>
-            <p className="mid bold primary">{category.title.toUpperCase()}</p>
+            <p className="sm bold secondary">COURSE</p>
+            <p className="mid bold primary">{course.title.toUpperCase()}</p>
           </div>
           <div className="d-flex gap-3 pt-2">
             {isEditing && (
@@ -59,7 +59,7 @@ export const CategoryItem = ({ category, handleDelete, handleUpdate }) => {
             <CustomButton
               size="sm"
               style="filled-black"
-              onClick={() => handleDelete(category._id)}
+              onClick={() => handleDelete(course._id)}
               disabled={false}
             >
               Delete
@@ -73,15 +73,22 @@ export const CategoryItem = ({ category, handleDelete, handleUpdate }) => {
           <NewInputText
             label="Slug"
             name="slug"
-            value={updateCategory.slug}
+            value={updateCourse.slug}
             onChange={handleChangeInput}
             rows={1}
             description="Recommended 200 characters"
           />
+          <NewInputImg
+            label="Hero Image"
+            name="heroImage"
+            onChange={handleChangeInput}
+            description="Recommended size: 1920x700px"
+            preview={updateCourse.heroImage}
+          />
           <NewInputText
             label="Title"
             name="title"
-            value={updateCategory.title}
+            value={updateCourse.title}
             onChange={handleChangeInput}
             rows={1}
             description="Recommended 200 characters"
@@ -89,7 +96,7 @@ export const CategoryItem = ({ category, handleDelete, handleUpdate }) => {
           <NewInputText
             label="Title Extended"
             name="titleExtended"
-            value={updateCategory.titleExtended}
+            value={updateCourse.titleExtended}
             onChange={handleChangeInput}
             rows={1}
             description="Recommended 200 characters"
@@ -97,7 +104,7 @@ export const CategoryItem = ({ category, handleDelete, handleUpdate }) => {
           <NewInputText
             label="Subtitle"
             name="subtitle"
-            value={updateCategory.subtitle}
+            value={updateCourse.subtitle}
             onChange={handleChangeInput}
             rows={1}
             description="Recommended 200 characters"
@@ -105,7 +112,7 @@ export const CategoryItem = ({ category, handleDelete, handleUpdate }) => {
           <NewInputText
             label="Description"
             name="description"
-            value={updateCategory.description}
+            value={updateCourse.description}
             onChange={handleChangeInput}
             rows={6}
             description="Recommended 200 characters"
@@ -115,7 +122,7 @@ export const CategoryItem = ({ category, handleDelete, handleUpdate }) => {
             name="gallerySlider"
             onChange={handleChangeInput}
             description="Recommended size: 1920x700px"
-            preview={updateCategory.gallerySlider}
+            preview={updateCourse.gallerySlider}
           />
         </Row>
       )}

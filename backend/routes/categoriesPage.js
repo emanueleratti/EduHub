@@ -25,10 +25,12 @@ categoriesPage.get("/", async (request, response, next) => {
   }
 });
 
-// GET ID
-categoriesPage.get("/:id", async (request, response, next) => {
+// GET SLUG
+categoriesPage.get("/corsi/:slug", async (request, response, next) => {
   try {
-    const category = await categoriesSchema.findById(request.params.id);
+    const category = await categoriesSchema.findOne({
+      slug: request.params.slug,
+    });
 
     if (!category) {
       return response.status(404).send({
@@ -48,54 +50,46 @@ categoriesPage.get("/:id", async (request, response, next) => {
 });
 
 // POST
-categoriesPage.post(
-  "/create",
-  // categoriesValidator,
-  async (request, response, next) => {
-    try {
-      const newCategory = new categoriesSchema(request.body);
-      const category = await newCategory.save();
+categoriesPage.post("/create", async (request, response, next) => {
+  try {
+    const newCategory = new categoriesSchema(request.body);
+    const category = await newCategory.save();
 
-      response.status(201).send({
-        statusCode: 201,
-        message: "Categoria creata con successo",
-        category,
-      });
-    } catch (error) {
-      next(error);
-    }
+    response.status(201).send({
+      statusCode: 201,
+      message: "Categoria creata con successo",
+      category,
+    });
+  } catch (error) {
+    next(error);
   }
-);
+});
 
 // PATCH
-categoriesPage.patch(
-  "/update/:id",
-  // categoriesValidator,
-  async (request, response, next) => {
-    try {
-      const updatedPage = await categoriesSchema.findByIdAndUpdate(
-        request.params.id,
-        request.body,
-        { new: true, runValidators: true }
-      );
+categoriesPage.patch("/update/:id", async (request, response, next) => {
+  try {
+    const updatedPage = await categoriesSchema.findByIdAndUpdate(
+      request.params.id,
+      request.body,
+      { new: true, runValidators: true }
+    );
 
-      if (!updatedPage) {
-        return response.status(404).send({
-          statusCode: 404,
-          message: "Pagina categories non trovata",
-        });
-      }
-
-      response.status(200).send({
-        statusCode: 200,
-        message: "Pagina categories aggiornata con successo",
-        categoryPage: updatedPage,
+    if (!updatedPage) {
+      return response.status(404).send({
+        statusCode: 404,
+        message: "Pagina categories non trovata",
       });
-    } catch (error) {
-      next(error);
     }
+
+    response.status(200).send({
+      statusCode: 200,
+      message: "Pagina categories aggiornata con successo",
+      categoryPage: updatedPage,
+    });
+  } catch (error) {
+    next(error);
   }
-);
+});
 
 // DELETE
 categoriesPage.delete("/delete/:id", async (request, response, next) => {

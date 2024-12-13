@@ -1,8 +1,21 @@
 import "./Navbar.css";
 import React from "react";
 import { Container } from "react-bootstrap";
+import { useAtom } from "jotai";
+import {
+  categoriesPageDataAtom,
+  categoriesPageActionsAtom,
+} from "../../stateManager/atom";
+import { useEffect } from "react";
 
 export const Navbar = () => {
+  const [categoriesPageData] = useAtom(categoriesPageDataAtom);
+  const [, getCategories] = useAtom(categoriesPageActionsAtom);
+
+  useEffect(() => {
+    getCategories({ type: "GET" });
+  }, []);
+
   return (
     <Container fluid className="navbar d-flex justify-content-between px-5">
       <div className="logo black">SoftwareLogo</div>
@@ -10,8 +23,25 @@ export const Navbar = () => {
         <a className="menu" href="/">
           HOME
         </a>
-        <a className="menu" href="/corsi">
-          CORSI
+        <div className="d-flex flex-column gap-2 dropdown position-relative">
+          <a className="menu" href="/corsi">
+            CORSI
+          </a>
+          {/* <div className="d-flex flex-column gap-3 submenu-container">
+            {categoriesPageData &&
+              categoriesPageData.map((category, index) => (
+                <a
+                  key={index}
+                  className="bold secondary submenu"
+                  href={`/corsi/${category.slug}`}
+                >
+                  {category.title.toUpperCase()}
+                </a>
+              ))}
+          </div> */}
+        </div>
+        <a className="menu" href="/corso-rhinoceros">
+          RHINOCEROS
         </a>
         <a className="menu" href="#">
           CHI SIAMO

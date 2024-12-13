@@ -8,9 +8,8 @@ import {
 import { useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { CustomButton } from "../components/CustomButtons/CustomButton";
-import { InputText } from "../components/InputFields/InputText";
-import { NewInputText } from "../components/InputFields/NewInputText";
-import { InputImg } from "../components/InputFields/InputImg";
+import { NewInputText } from "../components/Elements/NewInputText";
+import { NewInputImg } from "../components/Elements/NewInputImg";
 import { CategoryItem } from "../components/Elements/CategoryItem";
 import { Dashboard } from "../components/Navbar/Dashboard";
 
@@ -20,22 +19,60 @@ export const CategoriesDashboard = () => {
   const [loading] = useAtom(isLoadingAtom);
   const [, categoriesCRUD] = useAtom(categoriesPageActionsAtom);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    await categoriesCRUD({ type: "PATCH" });
-    categoriesCRUD({ type: "GET" });
-  };
-
   const handleChangeInput = (event) => {
     const { name, value } = event.target;
-    categoriesCRUD({ type: "PATCH_FIELD", payload: { name, value } });
+
+    // Gestione dei campi nidificati
+    if (name.includes(".")) {
+      const [parent, child, subChild] = name.split(".");
+      if (subChild) {
+        // Per campi come levels.GROUP.price
+        courseCRUD({
+          type: "PATCH_FIELD",
+          payload: {
+            path: [parent, child, subChild],
+            value,
+          },
+        });
+      } else {
+        // Per campi come levels.title
+        courseCRUD({
+          type: "PATCH_FIELD",
+          payload: {
+            path: [parent, child],
+            value,
+          },
+        });
+      }
+    } else {
+      // Per campi di primo livello come title, slug, etc.
+      courseCRUD({
+        type: "PATCH_FIELD",
+        payload: {
+          path: [name],
+          value,
+        },
+      });
+    }
   };
 
-  const handleCreate = async (categoryData) => {
+  const handleCreate = async (event) => {
+    event.preventDefault();
+
+    const newCategoryData = {
+      slug: categoriesPage.slug,
+      title: categoriesPage.title,
+      titleExtended: categoriesPage.titleExtended,
+      subtitle: categoriesPage.subtitle,
+      description: categoriesPage.description,
+      gallerySlider: categoriesPage.gallerySlider || [],
+    };
+
     await categoriesCRUD({
       type: "POST",
-      payload: { categoryData },
+      payload: { categoryData: newCategoryData },
     });
+    categoriesCRUD({ type: "GET" });
   };
 
   const handleUpdate = async (id, updateData) => {
@@ -43,6 +80,7 @@ export const CategoriesDashboard = () => {
       type: "PATCH",
       payload: { id, updateData },
     });
+    categoriesCRUD({ type: "GET" });
   };
 
   const handleDelete = async (id) => {
@@ -50,13 +88,12 @@ export const CategoriesDashboard = () => {
       type: "DELETE",
       payload: { id },
     });
+    categoriesCRUD({ type: "GET" });
   };
 
   useEffect(() => {
     categoriesCRUD({ type: "GET" });
   }, []);
-
-  console.log(categoriesPage);
 
   return (
     <Container fluid>
@@ -64,83 +101,76 @@ export const CategoriesDashboard = () => {
         <Dashboard />
         <Col className="col flex-grow-1 p-6 grey-bg d-flex flex-column gap-5">
           <p className="bold lg">CATEGORIES DASHBOARD</p>
-          {categoriesPage.map((category) => (
-            <CategoryItem title={category.title} />
+          {categoriesPageData.map((category, index) => (
+            <CategoryItem
+              key={index}
+              category={category}
+              slug={category.slug}
+              id={category._id}
+              handleDelete={handleDelete}
+              handleUpdate={handleUpdate}
+            />
           ))}
+
           <p className="bold lg">CREATE NEW CATEGORY</p>
+
           <Container fluid>
-            <Row className="d-flex flex-column gap-5">
+            <Row className="d-flex lg-grey-bg flex-wrap p-4 px-3 gy-4">
               {/* CATEGORIES*/}
-              <Col className="pt-4 pb-2 px-4 lg-grey-bg d-flex flex-column gap-4">
-                <p className="mid bold primary">SLUG</p>
-                <NewInputText
-                  label="Slug"
-                  name="slug"
-                  value={categoriesPage.slug}
-                  onChange={handleChangeInput}
-                  rows={1}
-                  description="Recommended 200 characters"
-                  preview={categoriesPageData.slug}
-                />
-                <NewInputText
-                  label="Slug"
-                  name="slug"
-                  value={categoriesPage.slug}
-                  onChange={handleChangeInput}
-                  rows={1}
-                  description="Recommended 200 characters"
-                  preview={categoriesPageData.slug}
-                />
-                <InputText
-                  label="Title"
-                  name="title"
-                  value={categoriesPage.title}
-                  onChange={handleChangeInput}
-                  rows={1}
-                  description="Recommended 200 characters"
-                  preview={categoriesPageData.title}
-                />
-                <InputText
-                  label="Title Extended"
-                  name="titleExtended"
-                  value={categoriesPage.titleExtended}
-                  onChange={handleChangeInput}
-                  rows={1}
-                  description="Recommended 200 characters"
-                  preview={categoriesPageData.titleExtended}
-                />
-                <InputText
-                  label="Subtitle"
-                  name="subtitle"
-                  value={categoriesPage.subtitle}
-                  onChange={handleChangeInput}
-                  rows={1}
-                  description="Recommended 200 characters"
-                  preview={categoriesPageData.subtitle}
-                />
-                <InputText
-                  label="Description"
-                  name="description"
-                  value={categoriesPage.description}
-                  onChange={handleChangeInput}
-                  rows={1}
-                  description="Recommended 200 characters"
-                  preview={categoriesPageData.description}
-                />
-                <InputImg
-                  label="Select images"
-                  name="gallerySlider"
-                  onChange={handleChangeInput}
-                  description="Recommended size: 1920x700px"
-                  preview={categoriesPageData.gallerySlider || ""}
-                />
-              </Col>
+              <p className="mid bold primary">CATEGORY INFORMATION</p>
+              <NewInputText
+                label="Slug"
+                name="slug"
+                value={categoriesPage.slug}
+                onChange={handleChangeInput}
+                rows={1}
+                description="Recommended 200 characters"
+              />
+              <NewInputText
+                label="Title"
+                name="title"
+                value={categoriesPage.title}
+                onChange={handleChangeInput}
+                rows={1}
+                description="Recommended 200 characters"
+              />
+              <NewInputText
+                label="Title Extended"
+                name="titleExtended"
+                value={categoriesPage.titleExtended}
+                onChange={handleChangeInput}
+                rows={1}
+                description="Recommended 200 characters"
+              />
+              <NewInputText
+                label="Subtitle"
+                name="subtitle"
+                value={categoriesPage.subtitle}
+                onChange={handleChangeInput}
+                rows={1}
+                description="Recommended 200 characters"
+              />
+              <NewInputText
+                label="Description"
+                name="description"
+                value={categoriesPage.description}
+                onChange={handleChangeInput}
+                rows={6}
+                description="Recommended 200 characters"
+              />
+              <NewInputImg
+                label="Select images"
+                name="gallerySlider"
+                onChange={handleChangeInput}
+                description="Recommended size: 1920x700px"
+                preview={categoriesPageData.gallerySlider}
+              />
             </Row>
           </Container>
           <CustomButton
             size="lg"
             style="filled-gradient"
-            onClick={handleSubmit}
+            onClick={handleCreate}
             disabled={loading}
             type="submit"
           >

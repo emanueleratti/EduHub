@@ -8,8 +8,8 @@ import {
 import { useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { CustomButton } from "../components/CustomButtons/CustomButton";
-import { InputText } from "../components/InputFields/InputText";
-import { InputImg } from "../components/InputFields/InputImg";
+import { InputText } from "../components/Elements/InputText";
+import { InputImg } from "../components/Elements/InputImg";
 import { Dashboard } from "../components/Navbar/Dashboard";
 
 export const CoursesDashboard = () => {
