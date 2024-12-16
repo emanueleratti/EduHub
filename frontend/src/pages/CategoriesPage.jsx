@@ -2,8 +2,9 @@ import { useAtom } from "jotai";
 import {
   categoriesPageDataAtom,
   categoriesPageActionsAtom,
-  currentCategoryAtom,
-  coursesPageDataAtom,
+  singleCoursePageDataAtom,
+  singleCoursePageActionsAtom,
+  isLoadingAtom,
 } from "../stateManager/atom";
 import { useEffect } from "react";
 import { PageLayout } from "../layout/PageLayout";
@@ -11,27 +12,38 @@ import { Container, Row, Col } from "react-bootstrap";
 import { Slider } from "../components/ImageContainer/Slider";
 import { TitleLink } from "../components/Elements/TitleLink";
 import { useParams } from "react-router-dom";
+import { Loader } from "../components/Loader/Loader";
+
 export const CategoriesPage = () => {
-  const { slug } = useParams();
+  const { category: categorySlug } = useParams();
   const [categoriesPageData] = useAtom(categoriesPageDataAtom);
-  const [currentCategory] = useAtom(currentCategoryAtom);
-  const [coursesPageData] = useAtom(coursesPageDataAtom);
-  const [, categoriesCRUD] = useAtom(categoriesPageActionsAtom);
-  const [, coursesCRUD] = useAtom(coursesPageActionsAtom);
+  const [, getSingleCategory] = useAtom(categoriesPageActionsAtom);
+  const [singleCoursePageData] = useAtom(singleCoursePageDataAtom);
+  const [, getSingleCourse] = useAtom(singleCoursePageActionsAtom);
+  const [isLoading] = useAtom(isLoadingAtom);
+
+  const currentCategory = categoriesPageData?.find(
+    (category) => category.slug === categorySlug && !category.isTemplate
+  );
+
+  const categoryCourses = currentCategory?._id
+    ? singleCoursePageData?.filter(
+        (course) => course.category._id === currentCategory._id
+      )
+    : [];
 
   useEffect(() => {
-    if (slug) {
-      categoriesCRUD({
-        type: "GET_BY_SLUG",
-        payload: { slug },
-      });
-    }
-    coursesCRUD({
-      type: "GET",
-    });
-  }, [slug]);
+    getSingleCourse({ type: "GET" });
+    getSingleCategory({ type: "GET" });
+  }, []);
 
-  console.log(coursesPageData);
+  if (!currentCategory || isLoading) {
+    return (
+      <PageLayout>
+        <Loader />
+      </PageLayout>
+    );
+  }
 
   return (
     <PageLayout>
@@ -41,7 +53,7 @@ export const CategoriesPage = () => {
           <Row>
             <Col className="col-12 d-flex flex-column gap-5">
               <h1 className="white bold">
-                <span style={{ fontWeight: 300 }}>
+                <span style={{ fontWeight: 400 }}>
                   Corsi <br />
                 </span>
                 {currentCategory?.title}
@@ -52,7 +64,7 @@ export const CategoriesPage = () => {
       </Container>
 
       {/* FIRST DESCRIPTION */}
-      <Container className="py-6">
+      <Container className="pt-6 pb-0">
         <Row>
           <Col className="col-12 d-flex flex-column gap-5">
             <h5>{currentCategory?.subtitle}</h5>
@@ -62,15 +74,15 @@ export const CategoriesPage = () => {
         </Row>
       </Container>
 
-      <Container className="pb-7 d-flex flex-column">
-        {/* {currentCategory?.courses.map((category, index) => (
+      <Container className="py-7 d-flex flex-column">
+        {categoryCourses.map((course, index) => (
           <TitleLink
             key={index}
             title={course.title}
             icon="ri-arrow-right-line"
-            link={`/corsi/${course.slug}`}
+            link={`/corsi/${categorySlug}/${course.slug}`}
           />
-        ))} */}
+        ))}
       </Container>
 
       {/* GALLERY SLIDER */}

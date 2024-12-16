@@ -18,6 +18,7 @@ nav a:hover {
   padding: 20px;
   background-color: var(--white);
   transition: opacity 0.3s ease-in-out;
+  width: 200px;
 }
 
 .dropdown:hover .submenu-container {

@@ -27,6 +27,10 @@ const categoriesSchema = new mongoose.Schema({
       required: true,
     },
   ],
+  isTemplate: {
+    type: Boolean,
+    default: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

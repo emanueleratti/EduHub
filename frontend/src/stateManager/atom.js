@@ -136,19 +136,19 @@ export const coursesPageActionsAtom = atom(null, async (get, set, action) => {
 });
 
 // CATEGORIES PAGE
-export const defaultCategoriesPage = [
-  {
-    slug: "",
-    title: "",
-    titleExtended: "",
-    subtitle: "",
-    description: "",
-    gallerySlider: [],
-  },
-];
+export const defaultCategoriesPage = {
+  slug: "",
+  title: "",
+  titleExtended: "",
+  subtitle: "",
+  description: "",
+  gallerySlider: [],
+  isTemplate: false,
+};
 export const categoriesPageAtom = atom(defaultCategoriesPage);
-export const categoriesPageDataAtom = atom(defaultCategoriesPage);
+export const categoriesPageDataAtom = atom([]);
 export const currentCategoryAtom = atom(null);
+
 export const categoriesPageActionsAtom = atom(
   null,
   async (get, set, action) => {
@@ -161,17 +161,7 @@ export const categoriesPageActionsAtom = atom(
           const response = await axios.get(
             `${import.meta.env.VITE_URL}/categoriesPage`
           );
-
-          if (response.data && response.data.categories) {
-            set(categoriesPageDataAtom, response.data.categories);
-            set(categoriesPageAtom, response.data.categories);
-          } else {
-            console.error(
-              "Dati categorie non trovati nella risposta:",
-              response.data
-            );
-            handleError(null, "Struttura dati non valida");
-          }
+          set(categoriesPageDataAtom, response.data.categories);
         } catch (error) {
           handleError(error, "Errore durante il caricamento delle categorie");
         } finally {
@@ -179,28 +169,16 @@ export const categoriesPageActionsAtom = atom(
         }
         break;
 
-      case "GET_BY_SLUG":
+      case "GET_BY_CATEGORY":
         try {
           setLoading(true);
-          const { slug } = action.payload;
-
-          if (!slug) {
-            throw new Error("Slug non valido");
-          }
-
+          const { category } = action.payload;
           const response = await axios.get(
-            `${import.meta.env.VITE_URL}/categoriesPage/corsi/${slug}`
+            `${import.meta.env.VITE_URL}/categoriesPage/${category}`
           );
-
-          if (response.data && response.data.category) {
-            set(currentCategoryAtom, response.data.category);
-          } else {
-            set(currentCategoryAtom, null);
-            handleError(null, "Categoria non trovata");
-          }
+          set(currentCategoryAtom, response.data.category);
+          set(categoriesPageAtom, response.data.category);
         } catch (error) {
-          console.error("Error fetching category:", error);
-          set(currentCategoryAtom, null);
           handleError(error, "Errore durante il caricamento della categoria");
         } finally {
           setLoading(false);
@@ -211,21 +189,16 @@ export const categoriesPageActionsAtom = atom(
         try {
           setLoading(true);
           const { categoryData } = action.payload;
-
           const response = await axios.post(
             `${import.meta.env.VITE_URL}/categoriesPage/create`,
             categoryData
           );
-
           const currentCategories = get(categoriesPageDataAtom);
-
-          set(categoriesPageAtom, [
+          set(categoriesPageDataAtom, [
             ...currentCategories,
             response.data.category,
           ]);
-
           set(categoriesPageAtom, defaultCategoriesPage);
-
           handleNotification("Categoria creata con successo");
         } catch (error) {
           handleError(error, "Errore durante la creazione della categoria");
@@ -238,19 +211,16 @@ export const categoriesPageActionsAtom = atom(
         try {
           setLoading(true);
           const { id, updateData } = action.payload;
-
           const response = await axios.patch(
             `${import.meta.env.VITE_URL}/categoriesPage/update/${id}`,
             updateData
           );
-
           const currentCategories = get(categoriesPageDataAtom);
           const updatedCategories = currentCategories.map((category) =>
             category._id === id ? response.data.category : category
           );
-
-          set(categoriesPageAtom, updatedCategories);
-
+          set(categoriesPageDataAtom, updatedCategories);
+          set(categoriesPageAtom, defaultCategoriesPage);
           handleNotification("Categoria aggiornata con successo");
         } catch (error) {
           handleError(error, "Errore durante l'aggiornamento della categoria");
@@ -261,9 +231,9 @@ export const categoriesPageActionsAtom = atom(
 
       case "PATCH_FIELD":
         const { name, value } = action.payload;
-        const currentCategoriesPage = get(categoriesPageAtom);
+        const currentCategory = get(categoriesPageAtom);
         set(categoriesPageAtom, {
-          ...currentCategoriesPage,
+          ...currentCategory,
           [name]: value,
         });
         break;
@@ -272,18 +242,14 @@ export const categoriesPageActionsAtom = atom(
         try {
           setLoading(true);
           const { id } = action.payload;
-
           await axios.delete(
             `${import.meta.env.VITE_URL}/categoriesPage/delete/${id}`
           );
-
           const currentCategories = get(categoriesPageDataAtom);
           const filteredCategories = currentCategories.filter(
             (category) => category._id !== id
           );
-
-          set(categoriesPageAtom, filteredCategories);
-
+          set(categoriesPageDataAtom, filteredCategories);
           handleNotification("Categoria eliminata con successo");
         } catch (error) {
           handleError(error, "Errore durante l'eliminazione della categoria");
@@ -295,197 +261,184 @@ export const categoriesPageActionsAtom = atom(
   }
 );
 
-// COURSE PAGE
-const defaultCoursePage = [
-  {
-    slug: "corso-rhinoceros",
-    heroImage: "https://placehold.co/1920x700?text=Slider+1",
-    title: "Rhinoceros",
-    titleExtended: "Corso Rhinoceros",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent dapibus ullamcorper elit, non mattis dolor egestas non. Suspendisse elementum dui diam, non iaculis quam molestie vitae. Maecenas non dui sem. Sed auctor dolor a mollis accumsan. Praesent sed bibendum nibh. Vivamus fermentum nunc arcu, id condimentum dolor placerat non. Integer id ligula libero. Morbi auctor nunc ipsum, vitae tempus velit iaculis ac. Nam iaculis sapien ac justo ultrices, quis auctor ligula porttitor. Phasellus ullamcorper enim et dui fringilla, nec dapibus quam commodo. Integer tempus ultrices lacus, at congue enim congue sit amet. Praesent ex dolor, condimentum nec porta a, ultrices nec turpis. Proin viverra quam quis maximus consectetur. Pellentesque dui tortor, consequat non tempor eget, tincidunt sed mauris.",
-    highlightedText:
-      "Proin viverra quam quis maximus consectetur. Pellentesque dui tortor, consequat non tempor eget, tincidunt sed mauris.",
-    levels: [
-      {
-        title: "Livello 1",
-        description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent dapibus ullamcorper elit, non mattis dolor egestas non. Suspendisse elementum dui diam, non iaculis quam molestie vitae. Maecenas non dui sem. ",
-        programListTitle: "PROGRAMMA CORSO LIVELLO 1",
-        programFirstListItems:
-          "<ul><li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li><li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li><li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li></ul>",
-        programSecondListItems:
-          "<ul><li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li><li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li><li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li></ul>",
-        programThirdListItems:
-          "<ul><li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li><li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li><li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li></ul>",
-        GROUP: {
-          price: 500,
-          duration: "24 ore",
-          description:
-            "3 giornate da 8 ore<br/>Mattina: lezioni teoriche<br/>Pomeriggio: esercitazioni pratiche",
-        },
-        SINGLE: {
-          price: 550,
-          duration: "24 ore",
-          description:
-            "3 giornate da 8 ore<br/>Mattina: lezioni teoriche<br/>Pomeriggio: esercitazioni pratiche",
-        },
-        FRIENDS: {
-          price: 450,
-          duration: "24 ore",
-          description:
-            "3 giornate da 8 ore<br/>Mattina: lezioni teoriche<br/>Pomeriggio: esercitazioni pratiche",
-        },
+// SINGLE COURSE PAGE
+export const defaultSingleCoursePage = {
+  slug: "",
+  category: "",
+  heroImage: "",
+  title: "",
+  titleExtended: "",
+  description: "",
+  highlightedText: "",
+  levels: [
+    {
+      title: "",
+      description: "",
+      programListTitle: "",
+      programFirstListItems: [],
+      programSecondListItems: [],
+      programThirdListItems: [],
+      GROUP: {
+        price: 0,
+        duration: "",
+        description: "",
       },
-    ],
-  },
-];
+      SINGLE: {
+        price: 0,
+        duration: "",
+        description: "",
+      },
+      FRIENDS: {
+        price: 0,
+        duration: "",
+        description: "",
+      },
+    },
+  ],
+  isTemplate: false,
+};
 
-export const coursePageAtom = atom(defaultCoursePage);
-export const coursePageDataAtom = atom(defaultCoursePage);
-export const courseArrayAtom = atom([]);
-export const currentCourseAtom = atom(null);
+export const singleCoursePageAtom = atom(defaultSingleCoursePage);
+export const singleCoursePageDataAtom = atom([]);
+export const currentSingleCourseAtom = atom(null);
 
-export const coursePageActionsAtom = atom(null, async (get, set, action) => {
-  const setLoading = (value) => set(isLoadingAtom, value);
+export const singleCoursePageActionsAtom = atom(
+  null,
+  async (get, set, action) => {
+    const setLoading = (value) => set(isLoadingAtom, value);
 
-  switch (action.type) {
-    case "GET":
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          `${import.meta.env.VITE_URL}/coursePage`
-        );
-
-        set(courseArrayAtom, response.data.courses);
-        set(coursePageDataAtom, response.data.courses);
-        set(coursePageAtom, response.data.courses);
-      } catch (error) {
-        handleError(error, "Errore durante il caricamento dei corsi");
-      } finally {
-        setLoading(false);
-      }
-      break;
-
-    // case "GET_BY_SLUG":
-    //   try {
-    //     setLoading(true);
-    //     const { slug } = action.payload;
-
-    //     if (!slug) {
-    //       throw new Error("Slug non valido");
-    //     }
-
-    //     const response = await axios.get(
-    //       `${import.meta.env.VITE_URL}/coursePage/corsi/${slug}`
-    //     );
-
-    //     if (response.data && response.data.course) {
-    //       set(currentCourseAtom, response.data.course);
-    //     } else {
-    //       set(currentCourseAtom, null);
-    //       handleError(null, "Corso non trovato");
-    //     }
-    //   } catch (error) {
-    //     console.error("Error fetching course:", error);
-    //     set(currentCourseAtom, null);
-    //     handleError(error, "Errore durante il caricamento del corso");
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    //   break;
-
-    case "POST":
-      try {
-        setLoading(true);
-        const { courseData } = action.payload;
-
-        const response = await axios.post(
-          `${import.meta.env.VITE_URL}/coursePage/create`,
-          courseData
-        );
-
-        const currentCourse = get(coursePageDataAtom);
-
-        set(coursePageAtom, [...currentCourse, response.data.course]);
-
-        set(coursePageAtom, defaultCoursePage);
-
-        handleNotification("Corso creato con successo");
-      } catch (error) {
-        handleError(error, "Errore durante la creazione del corso");
-      } finally {
-        setLoading(false);
-      }
-      break;
-
-    // case "PATCH":
-    //   try {
-    //     setLoading(true);
-    //     const { id, updateData } = action.payload;
-
-    //     const response = await axios.patch(
-    //       `${import.meta.env.VITE_URL}/coursePage/update/${id}`,
-    //       updateData
-    //     );
-
-    //     const currentCourse = get(coursePageDataAtom);
-    //     const updatedCourse = currentCourse.map((course) =>
-    //       course._id === id ? response.data.course : course
-    //     );
-
-    //     set(coursePageAtom, updatedCourse);
-
-    //     handleNotification("Corso aggiornato con successo");
-    //   } catch (error) {
-    //     handleError(error, "Errore durante l'aggiornamento del corso");
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    //   break;
-
-    case "PATCH_FIELD":
-      try {
-        const { path, value } = action.payload;
-        const currentState = { ...get(coursePageAtom) };
-
-        let current = currentState;
-        for (let i = 0; i < path.length - 1; i++) {
-          if (!current[path[i]]) {
-            current[path[i]] = {};
-          }
-          current = current[path[i]];
+    switch (action.type) {
+      case "GET":
+      case "GET":
+        try {
+          setLoading(true);
+          const response = await axios.get(
+            `${import.meta.env.VITE_URL}/singleCoursePage`
+          );
+          set(singleCoursePageDataAtom, response.data.courses);
+        } catch (error) {
+          handleError(error, "Errore durante il caricamento dei corsi");
+        } finally {
+          setLoading(false);
         }
-        current[path[path.length - 1]] = value;
+        break;
 
-        set(coursePageAtom, currentState);
-      } catch (error) {
-        console.error("Error in PATCH_FIELD:", error);
-      }
-      break;
+      case "GET_BY_COURSE":
+        try {
+          setLoading(true);
+          const { course } = action.payload;
+          const response = await axios.get(
+            `${import.meta.env.VITE_URL}/categoriesPage/${course}`
+          );
+          set(currentSingleCourseAtom, response.data.course);
+          set(singleCoursePageAtom, response.data.course);
+        } catch (error) {
+          handleError(error, "Errore durante il caricamento della categoria");
+        } finally {
+          setLoading(false);
+        }
+        break;
 
-    case "DELETE":
-      try {
-        setLoading(true);
-        const { id } = action.payload;
+      case "POST":
+        try {
+          setLoading(true);
+          const { courseData } = action.payload;
+          const response = await axios.post(
+            `${import.meta.env.VITE_URL}/singleCoursePage/create`,
+            courseData
+          );
+          const currentCourses = get(singleCoursePageDataAtom);
+          set(singleCoursePageDataAtom, [
+            ...currentCourses,
+            response.data.course,
+          ]);
+          set(singleCoursePageAtom, defaultSingleCoursePage);
+          handleNotification("Corso creato con successo");
+        } catch (error) {
+          handleError(error, "Errore durante la creazione del corso");
+        } finally {
+          setLoading(false);
+        }
+        break;
 
-        await axios.delete(
-          `${import.meta.env.VITE_URL}/coursePage/delete/${id}`
-        );
+      case "PATCH":
+        try {
+          setLoading(true);
+          const { id, updateData } = action.payload;
+          const response = await axios.patch(
+            `${import.meta.env.VITE_URL}/singleCoursePage/update/${id}`,
+            updateData
+          );
+          const currentCourses = get(singleCoursePageDataAtom);
+          const updatedCourses = currentCourses.map((course) =>
+            course._id === id ? response.data.course : course
+          );
+          set(singleCoursePageDataAtom, updatedCourses);
+          set(singleCoursePageAtom, defaultSingleCoursePage);
+          handleNotification("Corso aggiornato con successo");
+        } catch (error) {
+          handleError(error, "Errore durante l'aggiornamento del corso");
+        } finally {
+          setLoading(false);
+        }
+        break;
 
-        const currentCourse = get(coursePageDataAtom);
-        const filteredCourses = currentCourse.filter(
-          (course) => course._id !== id
-        );
+      case "PATCH_FIELD":
+        try {
+          const { name, value } = action.payload;
+          const currentCourse = get(singleCoursePageAtom);
 
-        set(coursePageAtom, filteredCourses);
+          // Gestione campi nidificati
+          if (name.includes(".")) {
+            const parts = name.split(".");
+            const newCourse = { ...currentCourse };
+            let current = newCourse;
 
-        handleNotification("Corso eliminato con successo");
-      } catch (error) {
-        handleError(error, "Errore durante l'eliminazione del corso");
-      } finally {
-        setLoading(false);
-      }
-      break;
+            for (let i = 0; i < parts.length - 1; i++) {
+              if (Array.isArray(current[parts[i]])) {
+                // Se è un array, mantieni l'array esistente o creane uno nuovo
+                current[parts[i]] = current[parts[i]] || [];
+                // Assicurati che l'elemento dell'array esista
+                current[parts[i]][0] = current[parts[i]][0] || {};
+                current = current[parts[i]][0];
+              } else {
+                // Se è un oggetto, mantieni l'oggetto esistente o creane uno nuovo
+                current[parts[i]] = current[parts[i]] || {};
+                current = current[parts[i]];
+              }
+            }
+            current[parts[parts.length - 1]] = value;
+            set(singleCoursePageAtom, newCourse);
+          } else {
+            set(singleCoursePageAtom, {
+              ...currentCourse,
+              [name]: value,
+            });
+          }
+        } catch (error) {
+          console.error("Error in PATCH_FIELD:", error);
+        }
+        break;
+
+      case "DELETE":
+        try {
+          setLoading(true);
+          const { id } = action.payload;
+          await axios.delete(
+            `${import.meta.env.VITE_URL}/coursePage/delete/${id}`
+          );
+          const currentCourses = get(singleCoursePageDataAtom);
+          const filteredCourses = currentCourses.filter(
+            (course) => course._id !== id
+          );
+          set(singleCoursePageDataAtom, filteredCourses);
+          handleNotification("Corso eliminato con successo");
+        } catch (error) {
+          handleError(error, "Errore durante l'eliminazione del corso");
+        } finally {
+          setLoading(false);
+        }
+        break;
+    }
   }
-});
+);

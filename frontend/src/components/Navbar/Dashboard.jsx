@@ -5,19 +5,19 @@ import logo from "../../assets/eduhub-black.png";
 import {
   categoriesPageDataAtom,
   categoriesPageActionsAtom,
-  coursePageDataAtom,
-  coursePageActionsAtom,
+  singleCoursePageDataAtom,
+  singleCoursePageActionsAtom,
 } from "../../stateManager/atom";
 
 export const Dashboard = () => {
   const [categoriesPageData] = useAtom(categoriesPageDataAtom);
   const [, getCategories] = useAtom(categoriesPageActionsAtom);
-  const [coursePageData] = useAtom(coursePageDataAtom);
-  const [, getCourse] = useAtom(coursePageActionsAtom);
+  const [singleCoursePageData] = useAtom(singleCoursePageDataAtom);
+  const [, getSingleCourse] = useAtom(singleCoursePageActionsAtom);
 
   useEffect(() => {
     getCategories({ type: "GET" });
-    getCourse({ type: "GET" });
+    getSingleCourse({ type: "GET" });
   }, []);
 
   return (
@@ -41,7 +41,7 @@ export const Dashboard = () => {
             {categoriesPageData &&
               categoriesPageData.map((category, index) => (
                 <li key={index}>
-                  <a className="bold submenu secondary">
+                  <a className="bold submenu secondary pointer-none">
                     {category.title.toUpperCase()}
                   </a>
                 </li>
@@ -49,14 +49,14 @@ export const Dashboard = () => {
           </ul>
         </div>
         <div className="d-flex flex-column gap-2">
-          <a className="bold" href="/dashboard/course">
+          <a className="bold" href="/dashboard/single-course">
             COURSE
           </a>
           <ul className="d-flex flex-column gap-2 ps-3">
-            {coursePageData &&
-              coursePageData.map((course, index) => (
+            {singleCoursePageData &&
+              singleCoursePageData.map((course, index) => (
                 <li key={index}>
-                  <a className="bold submenu secondary">
+                  <a className="bold submenu secondary pointer-none">
                     {course.title.toUpperCase()}
                   </a>
                 </li>

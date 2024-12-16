@@ -1,7 +1,6 @@
 const express = require("express");
 const homePage = express.Router();
 const homeSchema = require("../models/homeSchema");
-const homeValidator = require("../middlewares/validators/homeValidator");
 
 const createDefaultHomePage = async () => {
   const defaultHomePage = {
@@ -55,24 +54,20 @@ homePage.get("/", async (request, response, next) => {
 });
 
 // PATCH
-homePage.patch(
-  "/update",
-  // homeValidator,
-  async (request, response, next) => {
-    try {
-      const homePage = await homeSchema.findOneAndUpdate({}, request.body, {
-        new: true,
-        runValidators: true,
-      });
-      response.status(200).send({
-        statusCode: 200,
-        message: "HomePage aggiornata correttamente",
-        homePage,
-      });
-    } catch (error) {
-      next(error);
-    }
+homePage.patch("/update", async (request, response, next) => {
+  try {
+    const homePage = await homeSchema.findOneAndUpdate({}, request.body, {
+      new: true,
+      runValidators: true,
+    });
+    response.status(200).send({
+      statusCode: 200,
+      message: "HomePage aggiornata correttamente",
+      homePage,
+    });
+  } catch (error) {
+    next(error);
   }
-);
+});
 
 module.exports = homePage;

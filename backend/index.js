@@ -13,7 +13,7 @@ const server = express();
 const homePage = require("./routes/homePage");
 const coursesPage = require("./routes/coursesPage");
 const categoriesPage = require("./routes/categoriesPage");
-const coursePage = require("./routes/coursePage");
+const singleCoursePage = require("./routes/singleCoursePage");
 const users = require("./routes/users");
 const contact = require("./routes/contact");
 
@@ -27,7 +27,7 @@ server.use(errorHandler);
 server.use("/homePage", homePage);
 server.use("/coursesPage", coursesPage);
 server.use("/categoriesPage", categoriesPage);
-server.use("/coursePage", coursePage);
+server.use("/singleCoursePage", singleCoursePage);
 server.use("/users", users);
 server.use("/contact", contact);
 

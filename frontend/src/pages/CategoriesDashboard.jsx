@@ -19,58 +19,23 @@ export const CategoriesDashboard = () => {
   const [loading] = useAtom(isLoadingAtom);
   const [, categoriesCRUD] = useAtom(categoriesPageActionsAtom);
 
+  const placeholderData = categoriesPageData.find(
+    (category) => category.slug === "default"
+  );
+
   const handleChangeInput = (event) => {
     const { name, value } = event.target;
-
-    // Gestione dei campi nidificati
-    if (name.includes(".")) {
-      const [parent, child, subChild] = name.split(".");
-      if (subChild) {
-        // Per campi come levels.GROUP.price
-        courseCRUD({
-          type: "PATCH_FIELD",
-          payload: {
-            path: [parent, child, subChild],
-            value,
-          },
-        });
-      } else {
-        // Per campi come levels.title
-        courseCRUD({
-          type: "PATCH_FIELD",
-          payload: {
-            path: [parent, child],
-            value,
-          },
-        });
-      }
-    } else {
-      // Per campi di primo livello come title, slug, etc.
-      courseCRUD({
-        type: "PATCH_FIELD",
-        payload: {
-          path: [name],
-          value,
-        },
-      });
-    }
+    categoriesCRUD({
+      type: "PATCH_FIELD",
+      payload: { name, value },
+    });
   };
 
   const handleCreate = async (event) => {
     event.preventDefault();
-
-    const newCategoryData = {
-      slug: categoriesPage.slug,
-      title: categoriesPage.title,
-      titleExtended: categoriesPage.titleExtended,
-      subtitle: categoriesPage.subtitle,
-      description: categoriesPage.description,
-      gallerySlider: categoriesPage.gallerySlider || [],
-    };
-
     await categoriesCRUD({
       type: "POST",
-      payload: { categoryData: newCategoryData },
+      payload: { categoryData: categoriesPage },
     });
     categoriesCRUD({ type: "GET" });
   };
@@ -125,6 +90,7 @@ export const CategoriesDashboard = () => {
                 onChange={handleChangeInput}
                 rows={1}
                 description="Recommended 200 characters"
+                placeholder={placeholderData?.slug}
               />
               <NewInputText
                 label="Title"
@@ -133,6 +99,7 @@ export const CategoriesDashboard = () => {
                 onChange={handleChangeInput}
                 rows={1}
                 description="Recommended 200 characters"
+                placeholder={placeholderData?.title}
               />
               <NewInputText
                 label="Title Extended"
@@ -141,6 +108,7 @@ export const CategoriesDashboard = () => {
                 onChange={handleChangeInput}
                 rows={1}
                 description="Recommended 200 characters"
+                placeholder={placeholderData?.titleExtended}
               />
               <NewInputText
                 label="Subtitle"
@@ -149,6 +117,7 @@ export const CategoriesDashboard = () => {
                 onChange={handleChangeInput}
                 rows={1}
                 description="Recommended 200 characters"
+                placeholder={placeholderData?.subtitle}
               />
               <NewInputText
                 label="Description"
@@ -157,6 +126,7 @@ export const CategoriesDashboard = () => {
                 onChange={handleChangeInput}
                 rows={6}
                 description="Recommended 200 characters"
+                placeholder={placeholderData?.description}
               />
               <NewInputImg
                 label="Select images"

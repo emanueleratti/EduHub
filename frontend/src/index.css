@@ -279,3 +279,7 @@ a:hover {
 .image-preview {
   margin-top: 8px !important;
 }
+
+.form-control::placeholder {
+  color: var(--grey) !important;
+}

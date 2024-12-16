@@ -1,54 +1,55 @@
 import "./Footer.css";
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
+import { useAtom } from "jotai";
+import { categoriesPageDataAtom } from "../../stateManager/atom";
 
 export const Footer = () => {
+  const [categoriesPageData] = useAtom(categoriesPageDataAtom);
+
   return (
     <Container fluid className="gradient-bg">
       <Container className="footer d-flex flex-column gap-5">
         <Row className="top g-4">
           <Col className="col-12 col-md-7 flex-grow-1 d-flex flex-column gap-2">
-            <div className="logo">SoftwareLogo</div>{" "}
+            <div className="logo">Rhinoceros Corsi</div>{" "}
             <p className="small">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-              euismod vitae ipsum vitae pharetra. Fusce fringilla eget diam ut
-              molestie. Aenean aliquam ipsum sit amet eros convallis, nec
-              facilisis urna pharetra.
+              Rhinoceros Corsi è Centro di Formazione Autorizzato McNeel. Tutti
+              i nostri Corsi di Rhinoceros sono certificati da insegnanti ART
+              (Authorized Rhinoceros Trainer) con oltre 10 anni di esperienza
+              attiva e diretta nel settore della progettazione professionale, e
+              nella docenza specialistica, anche a livello universitario.
             </p>
           </Col>
           <Col className="col-12 col-md-2 offset-md-1 flex-grow-0 d-flex flex-column gap-2">
             <span className="line white-bg mb-2"></span>
-            <h5>Tipologie Corsi</h5>
-            <a className="small" href="#">
-              Tipologia 1
-            </a>
-            <a className="small" href="#">
-              Tipologia 2
-            </a>
-            <a className="small" href="#">
-              Tipologia 3
-            </a>
-            <a className="small" href="#">
-              Tipologia 4
-            </a>
-            <a className="small" href="#">
-              Tipologia 5
-            </a>
+            <h5>Categorie</h5>
+            {categoriesPageData
+              ?.filter((category) => !category.isTemplate)
+              .map((category, index) => (
+                <a
+                  key={index}
+                  className="small"
+                  href={`/corsi/${category.slug}`}
+                >
+                  {category.title.toUpperCase()}
+                </a>
+              ))}
           </Col>
           <Col className="col-12 col-md-2 flex-grow-0 d-flex flex-column gap-2">
             <span className="line white-bg mb-2"></span>
             <h5>Contatti</h5>
             <a
               className="small d-flex align-items-center gap-2"
-              href="tel:+393333333333"
+              href="tel:+39055579555"
             >
-              <i className="ri-phone-fill icon-xs"></i> +393333333333
+              <i className="ri-phone-fill icon-xs"></i> 055 57 95 55
             </a>
             <a
               className="small d-flex align-items-center gap-2"
-              href="mailto:info@example.com"
+              href="mailto:info@rhinoceroscorsi.it"
             >
-              <i className="ri-mail-line icon-xs"></i> info@example.com
+              <i className="ri-mail-line icon-xs"></i> info@rhinoceroscorsi.it
             </a>
           </Col>
         </Row>

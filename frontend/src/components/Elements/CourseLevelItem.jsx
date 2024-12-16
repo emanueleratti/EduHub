@@ -3,76 +3,81 @@ import { Container, Row, Col } from "react-bootstrap";
 import { CustomButton } from "../CustomButtons/CustomButton";
 import { NewInputText } from "./NewInputText";
 
-export const CourseLevelItem = ({ level, handleDelete, handleUpdate }) => {
+export const CourseLevelItem = ({
+  level,
+  levelIndex,
+  onChange,
+  templateLevel,
+}) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [levelData, setLevelData] = useState({
-    title: "",
-    description: "",
-    programListTitle: "",
-    programFirstListItems: [],
-    programSecondListItems: [],
-    programThirdListItems: [],
-    GROUP: { price: "", duration: "", description: "" },
-    SINGLE: { price: "", duration: "", description: "" },
-    FRIENDS: { price: "", duration: "", description: "" },
-  });
+  const [levelData, setLevelData] = useState(level);
 
   const handleChangeInput = (event) => {
     const { name, value } = event.target;
 
     if (name.includes(".")) {
       const [parent, child] = name.split(".");
-      setLevelData((prev) => ({
-        ...prev,
+      const updatedLevel = {
+        ...levelData,
         [parent]: {
-          ...prev[parent],
+          ...levelData[parent],
           [child]: value,
         },
-      }));
+      };
+      setLevelData(updatedLevel);
+      onChange({
+        target: {
+          name: `levels[${levelIndex}]`,
+          value: updatedLevel,
+        },
+      });
     } else {
-      setLevelData((prev) => ({
-        ...prev,
+      const updatedLevel = {
+        ...levelData,
         [name]: value,
-      }));
+      };
+      setLevelData(updatedLevel);
+      onChange({
+        target: {
+          name: `levels[${levelIndex}]`,
+          value: updatedLevel,
+        },
+      });
     }
   };
 
-  const handleCreate = () => {
-    if (isEditing) {
-      handleUpdate(levelData);
-      setLevelData({
-        title: "",
-        description: "",
-        programListTitle: "",
-        programFirstListItems: [],
-        programSecondListItems: [],
-        programThirdListItems: [],
-        GROUP: { price: "", duration: "", description: "" },
-        SINGLE: { price: "", duration: "", description: "" },
-        FRIENDS: { price: "", duration: "", description: "" },
-      });
-    }
-    setIsEditing(!isEditing);
+  const handleDeleteLevel = () => {
+    onChange({
+      target: {
+        name: "levels",
+        value: "DELETE_LEVEL",
+        levelIndex,
+      },
+    });
   };
 
   return (
     <>
-      <Col className="p-4 grey-bg d-flex justify-content-between align-items-center">
+      <Col className="col-12 p-4 grey-bg d-flex justify-content-between align-items-center">
         <div className="d-flex gap-3 flex-column">
-          <p className="md bold secondary">
-            {isEditing
-              ? levelData.title || "Nuovo Livello"
-              : "Aggiungi Livello"}
-          </p>
+          <p className="md bold secondary">{level.title || "Nuovo Livello"}</p>
         </div>
         <div className="d-flex gap-3">
           {isEditing && (
             <CustomButton
               size="sm"
               style="filled-gradient"
-              onClick={handleCreate}
+              onClick={() => {
+                onChange({
+                  target: {
+                    name: `levels[${levelIndex}]`,
+                    value: levelData,
+                  },
+                });
+                setIsEditing(false);
+              }}
             >
-              Salva
+              Save
             </CustomButton>
           )}
           <CustomButton
@@ -80,22 +85,19 @@ export const CourseLevelItem = ({ level, handleDelete, handleUpdate }) => {
             style="filled-black"
             onClick={() => {
               if (isEditing) {
-                setLevelData({
-                  title: "",
-                  description: "",
-                  programListTitle: "",
-                  programFirstListItems: [],
-                  programSecondListItems: [],
-                  programThirdListItems: [],
-                  GROUP: { price: "", duration: "", description: "" },
-                  SINGLE: { price: "", duration: "", description: "" },
-                  FRIENDS: { price: "", duration: "", description: "" },
-                });
+                setLevelData(level);
               }
               setIsEditing(!isEditing);
             }}
           >
-            {isEditing ? "Annulla" : "Aggiungi"}
+            {isEditing ? "Cancel" : "Edit"}
+          </CustomButton>
+          <CustomButton
+            size="sm"
+            style="filled-black"
+            onClick={handleDeleteLevel}
+          >
+            Delete
           </CustomButton>
         </div>
       </Col>
@@ -111,6 +113,7 @@ export const CourseLevelItem = ({ level, handleDelete, handleUpdate }) => {
               rows={1}
               col={12}
               description="Recommended 200 characters"
+              placeholder={templateLevel?.title}
             />
             <NewInputText
               label="Level Description"
@@ -120,6 +123,7 @@ export const CourseLevelItem = ({ level, handleDelete, handleUpdate }) => {
               rows={3}
               col={12}
               description="Recommended 200 characters"
+              placeholder={templateLevel?.description}
             />
             <NewInputText
               label="Program List Title"
@@ -129,34 +133,62 @@ export const CourseLevelItem = ({ level, handleDelete, handleUpdate }) => {
               rows={1}
               col={12}
               description="Recommended 200 characters"
+              placeholder={templateLevel?.programListTitle}
             />
+
+            {/* PROGRAM LISTS */}
             <NewInputText
-              label="Program List Items"
+              label="Program First List"
               name="programFirstListItems"
-              value={levelData.programFirstListItems}
-              onChange={handleChangeInput}
+              value={levelData.programFirstListItems.join("\n")}
+              onChange={(e) =>
+                handleChangeInput({
+                  target: {
+                    name: "programFirstListItems",
+                    value: e.target.value.split("\n"),
+                  },
+                })
+              }
               rows={6}
               col={4}
-              description="Recommended 200 characters"
+              description="One item per line"
+              placeholder={templateLevel?.programFirstListItems.join("\n")}
             />
             <NewInputText
-              label="Program List Items"
+              label="Program Second List"
               name="programSecondListItems"
-              value={levelData.programSecondListItems}
-              onChange={handleChangeInput}
+              value={levelData.programSecondListItems.join("\n")}
+              onChange={(e) =>
+                handleChangeInput({
+                  target: {
+                    name: "programSecondListItems",
+                    value: e.target.value.split("\n"),
+                  },
+                })
+              }
               rows={6}
               col={4}
-              description="Recommended 200 characters"
+              description="One item per line"
+              placeholder={templateLevel?.programSecondListItems.join("\n")}
             />
             <NewInputText
-              label="Program List Items"
+              label="Program Third List"
               name="programThirdListItems"
-              value={levelData.programThirdListItems}
-              onChange={handleChangeInput}
+              value={levelData.programThirdListItems.join("\n")}
+              onChange={(e) =>
+                handleChangeInput({
+                  target: {
+                    name: "programThirdListItems",
+                    value: e.target.value.split("\n"),
+                  },
+                })
+              }
               rows={6}
               col={4}
-              description="Recommended 200 characters"
+              description="One item per line"
+              placeholder={templateLevel?.programThirdListItems.join("\n")}
             />
+
             <span className="line-small white-bg"></span>
             <p className="mid bold primary mt-4">
               COURSE LEVEL SPECIFIC INFORMATIONS
@@ -171,6 +203,7 @@ export const CourseLevelItem = ({ level, handleDelete, handleUpdate }) => {
               rows={1}
               col={4}
               description="Recommended 200 characters"
+              placeholder={templateLevel?.GROUP.duration}
             />
             <NewInputText
               label="Single Duration"
@@ -180,6 +213,7 @@ export const CourseLevelItem = ({ level, handleDelete, handleUpdate }) => {
               rows={1}
               col={4}
               description="Recommended 200 characters"
+              placeholder={templateLevel?.SINGLE.duration}
             />
             <NewInputText
               label="Friends Duration"
@@ -189,6 +223,7 @@ export const CourseLevelItem = ({ level, handleDelete, handleUpdate }) => {
               rows={1}
               col={4}
               description="Recommended 200 characters"
+              placeholder={templateLevel?.FRIENDS.duration}
             />
 
             {/* DESCRIPTIONS */}
@@ -200,6 +235,7 @@ export const CourseLevelItem = ({ level, handleDelete, handleUpdate }) => {
               rows={4}
               col={4}
               description="Recommended 200 characters"
+              placeholder={templateLevel?.GROUP.description}
             />
             <NewInputText
               label="Single Description"
@@ -209,6 +245,7 @@ export const CourseLevelItem = ({ level, handleDelete, handleUpdate }) => {
               rows={4}
               col={4}
               description="Recommended 200 characters"
+              placeholder={templateLevel?.SINGLE.description}
             />
             <NewInputText
               label="Friends Description"
@@ -218,6 +255,7 @@ export const CourseLevelItem = ({ level, handleDelete, handleUpdate }) => {
               rows={4}
               col={4}
               description="Recommended 200 characters"
+              placeholder={templateLevel?.FRIENDS.description}
             />
 
             {/* PRICES */}
@@ -229,6 +267,7 @@ export const CourseLevelItem = ({ level, handleDelete, handleUpdate }) => {
               rows={1}
               col={4}
               description="Recommended 200 characters"
+              placeholder={templateLevel?.GROUP.price}
             />
             <NewInputText
               label="Single Price"
@@ -238,6 +277,7 @@ export const CourseLevelItem = ({ level, handleDelete, handleUpdate }) => {
               rows={1}
               col={4}
               description="Recommended 200 characters"
+              placeholder={templateLevel?.SINGLE.price}
             />
             <NewInputText
               label="Friends Price"
@@ -247,6 +287,7 @@ export const CourseLevelItem = ({ level, handleDelete, handleUpdate }) => {
               rows={1}
               col={4}
               description="Recommended 200 characters"
+              placeholder={templateLevel?.FRIENDS.price}
             />
           </Row>
         </Container>

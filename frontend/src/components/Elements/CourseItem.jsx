@@ -3,17 +3,43 @@ import { Container, Row, Col } from "react-bootstrap";
 import { CustomButton } from "../CustomButtons/CustomButton";
 import { NewInputText } from "./NewInputText";
 import { NewInputImg } from "./NewInputImg";
+import { NewSelect } from "./NewSelect";
+import { CourseLevelItem } from "./CourseLevelItem";
+import { AddLevelButton } from "./AddLevelButton";
 
-export const CourseItem = ({ course, handleDelete, handleUpdate }) => {
+export const CourseItem = ({
+  course,
+  handleDelete,
+  handleUpdate,
+  categories,
+}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [updateCourse, setUpdateCourse] = useState(course);
 
   const handleChangeInput = (event) => {
     const { name, value } = event.target;
-    setUpdateCourse((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+
+    if (value === "DELETE_LEVEL") {
+      const newLevels = [...updateCourse.levels];
+      newLevels.splice(event.levelIndex, 1);
+      setUpdateCourse((prev) => ({
+        ...prev,
+        levels: newLevels,
+      }));
+    } else if (name.includes("levels[")) {
+      const levelIndex = name.match(/\[(\d+)\]/)[1];
+      const newLevels = [...updateCourse.levels];
+      newLevels[levelIndex] = value;
+      setUpdateCourse((prev) => ({
+        ...prev,
+        levels: newLevels,
+      }));
+    } else {
+      setUpdateCourse((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async () => {
@@ -78,13 +104,6 @@ export const CourseItem = ({ course, handleDelete, handleUpdate }) => {
             rows={1}
             description="Recommended 200 characters"
           />
-          <NewInputImg
-            label="Hero Image"
-            name="heroImage"
-            onChange={handleChangeInput}
-            description="Recommended size: 1920x700px"
-            preview={updateCourse.heroImage}
-          />
           <NewInputText
             label="Title"
             name="title"
@@ -102,9 +121,9 @@ export const CourseItem = ({ course, handleDelete, handleUpdate }) => {
             description="Recommended 200 characters"
           />
           <NewInputText
-            label="Subtitle"
-            name="subtitle"
-            value={updateCourse.subtitle}
+            label="Highlighted Text"
+            name="highlightedText"
+            value={updateCourse.highlightedText}
             onChange={handleChangeInput}
             rows={1}
             description="Recommended 200 characters"
@@ -114,15 +133,40 @@ export const CourseItem = ({ course, handleDelete, handleUpdate }) => {
             name="description"
             value={updateCourse.description}
             onChange={handleChangeInput}
-            rows={6}
+            rows={4}
+            col={12}
             description="Recommended 200 characters"
           />
+          <NewSelect
+            label="Categoria"
+            name="category"
+            value={updateCourse.category}
+            onChange={handleChangeInput}
+            options={categories}
+            description="Seleziona la categoria del corso"
+            placeholder="Seleziona una categoria"
+          />
           <NewInputImg
-            label="Gallery Slider"
-            name="gallerySlider"
+            label="Hero Image"
+            name="heroImage"
             onChange={handleChangeInput}
             description="Recommended size: 1920x700px"
-            preview={updateCourse.gallerySlider}
+            preview={updateCourse.heroImage}
+          />
+
+          <span className="line-small white-bg"></span>
+          <p className="mid bold primary mt-4">COURSE LEVELS</p>
+          {updateCourse.levels.map((level, index) => (
+            <CourseLevelItem
+              key={index}
+              level={level}
+              levelIndex={index}
+              onChange={handleChangeInput}
+            />
+          ))}
+          <AddLevelButton
+            currentLevels={updateCourse.levels}
+            onChange={handleChangeInput}
           />
         </Row>
       )}

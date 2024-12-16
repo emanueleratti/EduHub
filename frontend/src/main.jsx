@@ -6,11 +6,13 @@ import { Provider } from "jotai";
 import { ToastContainer } from "react-toastify";
 import { createRoot } from "react-dom/client";
 import { App } from "./App.jsx";
+import { Loader } from "./components/Loader/Loader.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider>
       <App />
+      <Loader />
       <ToastContainer
         position="bottom-center"
         autoClose={3000}

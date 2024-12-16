@@ -1,7 +1,6 @@
 const express = require("express");
 const coursesPage = express.Router();
 const coursesSchema = require("../models/coursesSchema");
-const coursesValidator = require("../middlewares/validators/coursesValidator");
 
 const createDefaultCoursesPage = async () => {
   const defaultCoursesPage = {
@@ -50,28 +49,20 @@ coursesPage.get("/", async (request, response, next) => {
 });
 
 // PATCH
-coursesPage.patch(
-  "/update",
-  // coursesValidator,
-  async (request, response, next) => {
-    try {
-      const coursesPage = await coursesSchema.findOneAndUpdate(
-        {},
-        request.body,
-        {
-          new: true,
-          runValidators: true,
-        }
-      );
-      response.status(200).send({
-        statusCode: 200,
-        message: "CoursesPage aggiornata correttamente",
-        coursesPage,
-      });
-    } catch (error) {
-      next(error);
-    }
+coursesPage.patch("/update", async (request, response, next) => {
+  try {
+    const coursesPage = await coursesSchema.findOneAndUpdate({}, request.body, {
+      new: true,
+      runValidators: true,
+    });
+    response.status(200).send({
+      statusCode: 200,
+      message: "CoursesPage aggiornata correttamente",
+      coursesPage,
+    });
+  } catch (error) {
+    next(error);
   }
-);
+});
 
 module.exports = coursesPage;
