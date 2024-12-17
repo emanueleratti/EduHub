@@ -21,7 +21,7 @@ export const HomePage = () => {
         <Row>
           <Col className="col-12 d-flex flex-column gap-5 align-items-center">
             <p className="lg bold">{homePageData?.firstIncipit}</p>
-            <img src={homePageData?.logo} alt="firstImage" />
+            <img src={homePageData?.logo} width="200" alt="firstImage" />
             <p className="lg">{homePageData?.firstDescription}</p>
           </Col>
         </Row>
@@ -44,10 +44,11 @@ export const HomePage = () => {
           </Col>
         </Row>
       </Container>
-      <Container fluid className="scrollText pb-6 overflow-hidden">
+      <Container fluid className="scrolltext-row pb-6 overflow-hidden">
         <Row>
           <Col className="col-12">
-            <div className="scrolltext-container">
+            <div className="scroll-container">
+              <span className="scrolltext">{homePageData?.scrollText}</span>
               <span className="scrolltext">{homePageData?.scrollText}</span>
             </div>
           </Col>
@@ -57,11 +58,15 @@ export const HomePage = () => {
         <Container>
           <Row>
             <Col className="col-12 d-flex flex-column gap-4 align-items-center">
-              <h3 className="black">{homePageData?.ctaTitle}</h3>
+              <h3 className="black text-center">{homePageData?.ctaTitle}</h3>
               <p className="black lg text-center px-7">
                 {homePageData?.ctaDescription}
               </p>
-              <CustomButton size="lg" style="filled-gradient">
+              <CustomButton
+                size="lg"
+                style="filled-gradient white"
+                href="/corsi"
+              >
                 {homePageData?.ctaButton}
               </CustomButton>
             </Col>

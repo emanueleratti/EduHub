@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useAtom } from "jotai";
 import {
   singleCoursePageDataAtom,
@@ -54,6 +55,50 @@ export const SingleCourseDashboard = () => {
     }
   };
 
+  const handleChangeFile = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      try {
+        singleCourseCRUD({
+          type: "SET_LOADING",
+          payload: true,
+        });
+
+        const formData = new FormData();
+        formData.append("image", file);
+
+        const response = await axios.post(
+          "http://localhost:4040/upload/cloud",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        const name = event.target.name;
+        singleCourseCRUD({
+          type: "PATCH_FIELD",
+          payload: {
+            name,
+            value: response.data.img,
+          },
+        });
+      } catch (error) {
+        console.error("Errore nel caricamento del file:", error);
+        const errorMessage =
+          error.response?.data?.message || "Errore nel caricamento del file";
+        alert(errorMessage);
+      } finally {
+        singleCourseCRUD({
+          type: "SET_LOADING",
+          payload: false,
+        });
+      }
+    }
+  };
+
   const handleCreate = async (event) => {
     event.preventDefault();
     await singleCourseCRUD({
@@ -104,7 +149,6 @@ export const SingleCourseDashboard = () => {
           <Container fluid>
             <Row className="d-flex lg-grey-bg flex-wrap pt-4 pb-3 px-3 gy-4">
               <p className="mid bold primary">COURSE INFORMATION</p>
-
               <NewInputText
                 label="Course Title"
                 name="title"
@@ -163,10 +207,11 @@ export const SingleCourseDashboard = () => {
               <NewInputImg
                 label="Select image"
                 name="heroImage"
-                onChange={handleChangeInput}
+                onChange={handleChangeFile}
                 description="Recommended size: 1920x700px"
                 preview={singleCoursePage.heroImage}
                 placeholder={placeholderData?.heroImage}
+                disabled={loading}
               />
               <span className="line-small white-bg"></span>
               <p className="mid bold primary mt-4">COURSE LEVELS</p>

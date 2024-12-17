@@ -33,6 +33,9 @@ export const Dashboard = () => {
         <a className="bold" href="/dashboard/courses">
           COURSES
         </a>
+        <a className="bold" href="/dashboard/about">
+          ABOUT
+        </a>
         <div className="d-flex flex-column gap-2">
           <a className="bold" href="/dashboard/categories">
             CATEGORIES

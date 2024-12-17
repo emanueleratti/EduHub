@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useAtom } from "jotai";
 import {
   categoriesPageDataAtom,
@@ -29,6 +30,50 @@ export const CategoriesDashboard = () => {
       type: "PATCH_FIELD",
       payload: { name, value },
     });
+  };
+
+  const handleChangeFile = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      try {
+        categoriesCRUD({
+          type: "SET_LOADING",
+          payload: true,
+        });
+
+        const formData = new FormData();
+        formData.append("image", file);
+
+        const response = await axios.post(
+          "http://localhost:4040/upload/cloud",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        const name = event.target.name;
+        categoriesCRUD({
+          type: "PATCH_FIELD",
+          payload: {
+            name,
+            value: response.data.img,
+          },
+        });
+      } catch (error) {
+        console.error("Errore nel caricamento del file:", error);
+        const errorMessage =
+          error.response?.data?.message || "Errore nel caricamento del file";
+        alert(errorMessage);
+      } finally {
+        categoriesCRUD({
+          type: "SET_LOADING",
+          payload: false,
+        });
+      }
+    }
   };
 
   const handleCreate = async (event) => {
@@ -131,9 +176,10 @@ export const CategoriesDashboard = () => {
               <NewInputImg
                 label="Select images"
                 name="gallerySlider"
-                onChange={handleChangeInput}
+                onChange={handleChangeFile}
                 description="Recommended size: 1920x700px"
                 preview={categoriesPageData.gallerySlider}
+                disabled={loading}
               />
             </Row>
           </Container>

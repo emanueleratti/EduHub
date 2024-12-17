@@ -47,11 +47,11 @@ export const Navbar = () => {
               ))}
           </div>
         </div>
-        <a className="menu" href="#">
+        <a className="menu" href="/about">
           CHI SIAMO
         </a>
-        <a className="menu" href="#">
-          CONTACT
+        <a className="menu" href="/contact">
+          CONTATTI
         </a>
         <a className="menu" href="/dashboard/homepage">
           <i className="ri-user-3-fill icon-sm"></i>

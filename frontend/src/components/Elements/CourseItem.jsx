@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { CustomButton } from "../CustomButtons/CustomButton";
@@ -6,6 +7,9 @@ import { NewInputImg } from "./NewInputImg";
 import { NewSelect } from "./NewSelect";
 import { CourseLevelItem } from "./CourseLevelItem";
 import { AddLevelButton } from "./AddLevelButton";
+import { isLoadingAtom } from "../../stateManager/atom";
+import { useAtom } from "jotai";
+import { coursesPageActionsAtom } from "../../stateManager/atom";
 
 export const CourseItem = ({
   course,
@@ -15,6 +19,8 @@ export const CourseItem = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [updateCourse, setUpdateCourse] = useState(course);
+  const [, coursesCRUD] = useAtom(coursesPageActionsAtom);
+  const [loading] = useAtom(isLoadingAtom);
 
   const handleChangeInput = (event) => {
     const { name, value } = event.target;
@@ -39,6 +45,50 @@ export const CourseItem = ({
         ...prev,
         [name]: value,
       }));
+    }
+  };
+
+  const handleChangeFile = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      try {
+        coursesCRUD({
+          type: "SET_LOADING",
+          payload: true,
+        });
+
+        const formData = new FormData();
+        formData.append("image", file);
+
+        const response = await axios.post(
+          "http://localhost:4040/upload/cloud",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        const name = event.target.name;
+        coursesCRUD({
+          type: "PATCH_FIELD",
+          payload: {
+            name,
+            value: response.data.img,
+          },
+        });
+      } catch (error) {
+        console.error("Errore nel caricamento del file:", error);
+        const errorMessage =
+          error.response?.data?.message || "Errore nel caricamento del file";
+        alert(errorMessage);
+      } finally {
+        coursesCRUD({
+          type: "SET_LOADING",
+          payload: false,
+        });
+      }
     }
   };
 
@@ -149,9 +199,10 @@ export const CourseItem = ({
           <NewInputImg
             label="Hero Image"
             name="heroImage"
-            onChange={handleChangeInput}
+            onChange={handleChangeFile}
             description="Recommended size: 1920x700px"
             preview={updateCourse.heroImage}
+            disabled={loading}
           />
 
           <span className="line-small white-bg"></span>

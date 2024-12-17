@@ -135,6 +135,67 @@ export const coursesPageActionsAtom = atom(null, async (get, set, action) => {
   }
 });
 
+// ABOUT PAGE
+export const defaultAbout = atom({
+  aboutTitle: "",
+  aboutSubtitle: "",
+  aboutDescription: "",
+  aboutImage: "",
+  contactTitle: "",
+  contactSubtitle: "",
+  contactDescription: "",
+  contactImage: "",
+});
+export const aboutAtom = atom(defaultAbout);
+export const aboutDataAtom = atom(defaultAbout);
+
+export const aboutActionsAtom = atom(null, async (get, set, action) => {
+  const setLoading = (value) => set(isLoadingAtom, value);
+
+  switch (action.type) {
+    case "GET":
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          `${import.meta.env.VITE_URL}/aboutPage`
+        );
+        set(aboutAtom, response.data.aboutPage);
+        set(aboutDataAtom, response.data.aboutPage);
+      } catch (error) {
+        handleError(error, "Errore durante il caricamento dei dati");
+      } finally {
+        setLoading(false);
+      }
+      break;
+
+    case "PATCH":
+      try {
+        setLoading(true);
+        const about = get(aboutAtom);
+        const response = await axios.patch(
+          `${import.meta.env.VITE_URL}/aboutPage/update`,
+          about
+        );
+        set(aboutAtom, response.data);
+        handleNotification("About aggiornato correttamente!");
+      } catch (error) {
+        handleError(error, "Errore durante l'aggiornamento");
+      } finally {
+        setLoading(false);
+      }
+      break;
+
+    case "PATCH_FIELD":
+      const { name, value } = action.payload;
+      const currentAbout = get(aboutAtom);
+      set(aboutAtom, {
+        ...currentAbout,
+        [name]: value,
+      });
+      break;
+  }
+});
+
 // CATEGORIES PAGE
 export const defaultCategoriesPage = {
   slug: "",

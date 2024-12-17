@@ -14,24 +14,28 @@ const homePage = require("./routes/homePage");
 const coursesPage = require("./routes/coursesPage");
 const categoriesPage = require("./routes/categoriesPage");
 const singleCoursePage = require("./routes/singleCoursePage");
+const aboutPage = require("./routes/aboutPage");
 const users = require("./routes/users");
 const contact = require("./routes/contact");
+const upload = require("./routes/upload");
 
 // Middlewares
 server.use(express.json());
 server.use(cors());
-server.use(badRequestHandler);
-server.use(errorHandler);
 
 // Routes
 server.use("/homePage", homePage);
 server.use("/coursesPage", coursesPage);
 server.use("/categoriesPage", categoriesPage);
 server.use("/singleCoursePage", singleCoursePage);
+server.use("/aboutPage", aboutPage);
 server.use("/users", users);
 server.use("/contact", contact);
-
+server.use("/upload", upload);
 init();
+
+server.use(badRequestHandler);
+server.use(errorHandler);
 
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

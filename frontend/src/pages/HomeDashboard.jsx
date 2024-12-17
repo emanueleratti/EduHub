@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useAtom } from "jotai";
 import {
   homePageDataAtom,
@@ -29,6 +30,50 @@ export const HomeDashboard = () => {
     homeCRUD({ type: "PATCH_FIELD", payload: { name, value } });
   };
 
+  const handleChangeFile = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      try {
+        homeCRUD({
+          type: "SET_LOADING",
+          payload: true,
+        });
+
+        const formData = new FormData();
+        formData.append("image", file);
+
+        const response = await axios.post(
+          "http://localhost:4040/upload/cloud",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        const name = event.target.name;
+        homeCRUD({
+          type: "PATCH_FIELD",
+          payload: {
+            name,
+            value: response.data.img,
+          },
+        });
+      } catch (error) {
+        console.error("Errore nel caricamento del file:", error);
+        const errorMessage =
+          error.response?.data?.message || "Errore nel caricamento del file";
+        alert(errorMessage);
+      } finally {
+        homeCRUD({
+          type: "SET_LOADING",
+          payload: false,
+        });
+      }
+    }
+  };
+
   useEffect(() => {
     homeCRUD({ type: "GET" });
   }, []);
@@ -47,10 +92,10 @@ export const HomeDashboard = () => {
                 <InputImg
                   label="Select Images"
                   name="heroSlider"
-                  // onChange={handleChangeFile}
+                  onChange={handleChangeFile}
                   description="Recommended size: 1920x700px"
                   preview={homePageData.heroSlider}
-                  handleSubmit={handleSubmit}
+                  disabled={loading}
                 />
               </Col>
               {/* FIRST SECTION */}
@@ -68,10 +113,10 @@ export const HomeDashboard = () => {
                 <InputImg
                   label="Upload Logo Image"
                   name="logo"
-                  // onChange={handleChangeFile}
+                  onChange={handleChangeFile}
                   description="Recommended size: 300x200px"
                   preview={homePageData.logo}
-                  handleSubmit={handleSubmit}
+                  disabled={loading}
                 />
                 <InputText
                   label="Description"

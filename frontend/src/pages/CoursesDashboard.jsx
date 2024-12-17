@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useAtom } from "jotai";
 import {
   coursesPageAtom,
@@ -29,6 +30,50 @@ export const CoursesDashboard = () => {
     coursesCRUD({ type: "PATCH_FIELD", payload: { name, value } });
   };
 
+  const handleChangeFile = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      try {
+        coursesCRUD({
+          type: "SET_LOADING",
+          payload: true,
+        });
+
+        const formData = new FormData();
+        formData.append("image", file);
+
+        const response = await axios.post(
+          "http://localhost:4040/upload/cloud",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        const name = event.target.name;
+        coursesCRUD({
+          type: "PATCH_FIELD",
+          payload: {
+            name,
+            value: response.data.img,
+          },
+        });
+      } catch (error) {
+        console.error("Errore nel caricamento del file:", error);
+        const errorMessage =
+          error.response?.data?.message || "Errore nel caricamento del file";
+        alert(errorMessage);
+      } finally {
+        coursesCRUD({
+          type: "SET_LOADING",
+          payload: false,
+        });
+      }
+    }
+  };
+
   useEffect(() => {
     coursesCRUD({ type: "GET" });
   }, []);
@@ -47,10 +92,10 @@ export const CoursesDashboard = () => {
                 <InputImg
                   label="Select an Image"
                   name="heroImage"
-                  // onChange={handleChangeFile}
+                  onChange={handleChangeFile}
                   description="Recommended size: 1920x700px"
                   preview={coursesPageData.heroImage}
-                  handleSubmit={handleSubmit}
+                  disabled={loading}
                 />
               </Col>
 

@@ -58,7 +58,7 @@ export const SingleCoursePage = () => {
             <Col className="col-12">
               <h3>
                 Corso <br />
-                {currentCourse?.title}
+                <span className="bold">{currentCourse?.title}</span>
               </h3>
             </Col>
           </Row>

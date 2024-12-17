@@ -1,12 +1,18 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { CustomButton } from "../CustomButtons/CustomButton";
 import { NewInputText } from "../Elements/NewInputText";
 import { NewInputImg } from "../Elements/NewInputImg";
+import { isLoadingAtom } from "../../stateManager/atom";
+import { useAtom } from "jotai";
+import { categoriesPageActionsAtom } from "../../stateManager/atom";
 
 export const CategoryItem = ({ category, handleDelete, handleUpdate }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [updateCategory, setUpdateCategory] = useState(category);
+  const [, categoriesCRUD] = useAtom(categoriesPageActionsAtom);
+  const [loading] = useAtom(isLoadingAtom);
 
   const handleChangeInput = (event) => {
     const { name, value } = event.target;
@@ -14,6 +20,50 @@ export const CategoryItem = ({ category, handleDelete, handleUpdate }) => {
       ...prev,
       [name]: value,
     }));
+  };
+
+  const handleChangeFile = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      try {
+        categoriesCRUD({
+          type: "SET_LOADING",
+          payload: true,
+        });
+
+        const formData = new FormData();
+        formData.append("image", file);
+
+        const response = await axios.post(
+          "http://localhost:4040/upload/cloud",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        const name = event.target.name;
+        categoriesCRUD({
+          type: "PATCH_FIELD",
+          payload: {
+            name,
+            value: response.data.img,
+          },
+        });
+      } catch (error) {
+        console.error("Errore nel caricamento del file:", error);
+        const errorMessage =
+          error.response?.data?.message || "Errore nel caricamento del file";
+        alert(errorMessage);
+      } finally {
+        categoriesCRUD({
+          type: "SET_LOADING",
+          payload: false,
+        });
+      }
+    }
   };
 
   const handleSubmit = async () => {
@@ -113,9 +163,10 @@ export const CategoryItem = ({ category, handleDelete, handleUpdate }) => {
           <NewInputImg
             label="Gallery Slider"
             name="gallerySlider"
-            onChange={handleChangeInput}
+            onChange={handleChangeFile}
             description="Recommended size: 1920x700px"
             preview={updateCategory.gallerySlider}
+            disabled={loading}
           />
         </Row>
       )}

@@ -10,6 +10,7 @@ export const CustomButton = ({
   onClick,
   disabled,
   type = "button",
+  href,
 }) => {
   const buttonClass = `
     btn 
@@ -24,6 +25,7 @@ export const CustomButton = ({
       onClick={onClick}
       type={type}
       disabled={disabled}
+      href={href}
     >
       {children}
     </Button>
