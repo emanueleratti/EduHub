@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const usersSchema = new mongoose.Schema({
-  username: {
+  email: {
     type: String,
     required: true,
     unique: true,
@@ -10,9 +10,10 @@ const usersSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  isAdmin: {
-    type: Boolean,
-    default: true,
+  role: {
+    type: String,
+    enum: ["admin", "user"],
+    default: "admin",
   },
   createdCourses: {
     type: mongoose.Schema.Types.ObjectId,

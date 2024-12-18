@@ -12,6 +12,9 @@ import { SingleCoursePage } from "./pages/SingleCoursePage";
 import { AboutDashboard } from "./pages/AboutDashboard";
 import { AboutPage } from "./pages/AboutPage";
 import { ContactPage } from "./pages/ContactPage";
+import { ProtectedRoute } from "../middlewares/ProtectedRoutes";
+import { RegistrationPage } from "./pages/RegistrationPage";
+import { LoginPage } from "./pages/LoginPage";
 
 export const App = () => {
   return (
@@ -23,15 +26,22 @@ export const App = () => {
         <Route path="/corsi" element={<CoursesPage />} />
         <Route path="/corsi/:category" element={<CategoriesPage />} />
         <Route path="/corsi/:category/:course" element={<SingleCoursePage />} />
+        <Route path="/registration" element={<RegistrationPage />} />
+        <Route path="/login" element={<LoginPage />} />
 
-        <Route path="/dashboard/homepage" element={<HomeDashboard />} />
-        <Route path="/dashboard/courses" element={<CoursesDashboard />} />
-        <Route path="/dashboard/categories" element={<CategoriesDashboard />} />
-        <Route path="/dashboard/about" element={<AboutDashboard />} />
-        <Route
-          path="/dashboard/single-course"
-          element={<SingleCourseDashboard />}
-        />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard/homepage" element={<HomeDashboard />} />
+          <Route path="/dashboard/courses" element={<CoursesDashboard />} />
+          <Route
+            path="/dashboard/categories"
+            element={<CategoriesDashboard />}
+          />
+          <Route path="/dashboard/about" element={<AboutDashboard />} />
+          <Route
+            path="/dashboard/single-course"
+            element={<SingleCourseDashboard />}
+          />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

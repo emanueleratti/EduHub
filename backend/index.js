@@ -5,6 +5,8 @@ const init = require("./db");
 const cors = require("cors");
 const errorHandler = require("./middlewares/errors/errorHandler");
 const badRequestHandler = require("./middlewares/errors/badRequestHandler");
+const authPage = require("./routes/auth");
+const { verifyToken } = require("./middlewares/utils/authToken");
 
 const express = require("express");
 const server = express();
@@ -23,7 +25,10 @@ const upload = require("./routes/upload");
 server.use(express.json());
 server.use(cors());
 
-// Routes
+// Routes Public
+server.use("/auth", authPage);
+
+// Routes Protected
 server.use("/homePage", homePage);
 server.use("/coursesPage", coursesPage);
 server.use("/categoriesPage", categoriesPage);

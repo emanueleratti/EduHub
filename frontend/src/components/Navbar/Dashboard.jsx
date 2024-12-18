@@ -8,12 +8,22 @@ import {
   singleCoursePageDataAtom,
   singleCoursePageActionsAtom,
 } from "../../stateManager/atom";
+import { authActionsAtom } from "../../stateManager/authAtom";
+import { useNavigate } from "react-router-dom";
+import { CustomButton } from "../CustomButtons/CustomButton";
 
 export const Dashboard = () => {
   const [categoriesPageData] = useAtom(categoriesPageDataAtom);
   const [, getCategories] = useAtom(categoriesPageActionsAtom);
   const [singleCoursePageData] = useAtom(singleCoursePageDataAtom);
   const [, getSingleCourse] = useAtom(singleCoursePageActionsAtom);
+  const [, authCRUD] = useAtom(authActionsAtom);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    authCRUD({ type: "LOGOUT" });
+    navigate("/login");
+  };
 
   useEffect(() => {
     getCategories({ type: "GET" });
@@ -40,7 +50,7 @@ export const Dashboard = () => {
           <a className="bold" href="/dashboard/categories">
             CATEGORIES
           </a>
-          <ul className="d-flex flex-column gap-2 ps-3 mb-0">
+          <ul className="d-flex flex-column gap-1 ps-3 mb-0">
             {categoriesPageData &&
               categoriesPageData.map((category, index) => (
                 <li key={index}>
@@ -55,7 +65,7 @@ export const Dashboard = () => {
           <a className="bold" href="/dashboard/single-course">
             COURSE
           </a>
-          <ul className="d-flex flex-column gap-2 ps-3">
+          <ul className="d-flex flex-column gap-1 ps-3 mb-0">
             {singleCoursePageData &&
               singleCoursePageData.map((course, index) => (
                 <li key={index}>
@@ -66,6 +76,9 @@ export const Dashboard = () => {
               ))}
           </ul>
         </div>
+        <a href="/login" className="bold" onClick={handleLogout}>
+          LOGOUT
+        </a>
       </nav>
     </Col>
   );

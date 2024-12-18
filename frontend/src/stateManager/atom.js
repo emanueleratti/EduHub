@@ -370,7 +370,6 @@ export const singleCoursePageActionsAtom = atom(
 
     switch (action.type) {
       case "GET":
-      case "GET":
         try {
           setLoading(true);
           const response = await axios.get(
