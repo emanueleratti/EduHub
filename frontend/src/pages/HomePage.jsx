@@ -16,17 +16,21 @@ export const HomePage = () => {
 
   return (
     <PageLayout className="first-section">
-      <Slider height="700px" image={homePageData?.heroSlider} />
+      <Slider
+        desktopHeight="700px"
+        mobileHeight="300px"
+        image={homePageData?.heroSlider}
+      />
       <Container className="py-6">
         <Row>
-          <Col className="col-12 d-flex flex-column gap-5 align-items-center">
+          <Col className="col-12 d-flex flex-column gap-6 align-items-center">
             <p className="lg bold">{homePageData?.firstIncipit}</p>
             <img src={homePageData?.logo} width="200" alt="firstImage" />
             <p className="lg">{homePageData?.firstDescription}</p>
           </Col>
         </Row>
       </Container>
-      <Container fluid className="bg-black py-6">
+      <Container fluid className="bg-black py-7">
         <Container>
           <Row>
             <Col className="col-12 d-flex flex-column gap-5">
@@ -59,7 +63,7 @@ export const HomePage = () => {
           <Row>
             <Col className="col-12 d-flex flex-column gap-4 align-items-center">
               <h3 className="black text-center">{homePageData?.ctaTitle}</h3>
-              <p className="black lg text-center px-7">
+              <p className="black lg text-center px-2 px-lg-7">
                 {homePageData?.ctaDescription}
               </p>
               <CustomButton

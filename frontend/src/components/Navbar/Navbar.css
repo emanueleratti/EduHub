@@ -19,8 +19,69 @@ nav a:hover {
   background-color: var(--white);
   transition: opacity 0.3s ease-in-out;
   width: 200px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .dropdown:hover .submenu-container {
   opacity: 1;
+}
+
+.burger-menu {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+@media (max-width: 768px) {
+  .nav-menu {
+    position: fixed;
+    transform: translateX(100%);
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 80%;
+    max-width: 250px;
+    background: var(--lg-grey);
+    flex-direction: column !important;
+    padding: 80px 20px !important;
+    transition: 0.3s ease-in-out;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    display: flex !important;
+    visibility: hidden;
+    z-index: 999;
+  }
+
+  .nav-menu.open {
+    transform: translateX(0);
+    visibility: visible;
+  }
+
+  .dropdown {
+    flex-direction: column;
+  }
+
+  .submenu-container {
+    position: static !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    padding: 0px !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .burger-menu i {
+    transition: transform 0.3s ease;
+  }
+
+  .burger-menu i.open {
+    transform: rotate(90deg);
+  }
+}
+
+body.menu-open {
+  overflow: hidden;
 }

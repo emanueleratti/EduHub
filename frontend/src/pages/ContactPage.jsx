@@ -19,7 +19,7 @@ export const ContactPage = () => {
       <Container fluid className="bg-black py-6">
         <Container>
           <Row>
-            <Col className="col-12 d-flex flex-column gap-5">
+            <Col className="col-12">
               <h3 className="white">
                 <span className="bold">Let's Keep</span>
                 <br />
@@ -40,7 +40,11 @@ export const ContactPage = () => {
         </Row>
       </Container>
       {/* CONTACT IMAGE */}
-      <Cover height="500px" image={aboutData?.contactImage} />
+      <Cover
+        desktopHeight="500px"
+        mobileHeight="300px"
+        image={aboutData?.contactImage}
+      />
     </PageLayout>
   );
 };

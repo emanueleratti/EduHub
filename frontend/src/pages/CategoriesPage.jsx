@@ -51,7 +51,7 @@ export const CategoriesPage = () => {
       <Container fluid className="bg-black py-6">
         <Container>
           <Row>
-            <Col className="col-12 d-flex flex-column gap-5">
+            <Col className="col-12">
               <h1 className="white bold">
                 <span style={{ fontWeight: 400 }}>
                   Corsi <br />
@@ -64,7 +64,7 @@ export const CategoriesPage = () => {
       </Container>
 
       {/* FIRST DESCRIPTION */}
-      <Container className="pt-6 pb-0">
+      <Container className="pt-6 pb-5">
         <Row>
           <Col className="col-12 d-flex flex-column gap-5">
             <h5>{currentCategory?.subtitle}</h5>
@@ -74,7 +74,7 @@ export const CategoriesPage = () => {
         </Row>
       </Container>
 
-      <Container className="py-7 d-flex flex-column">
+      <Container className="pt-4 pb-7 d-flex flex-column">
         {categoryCourses.map((course, index) => (
           <TitleLink
             key={index}

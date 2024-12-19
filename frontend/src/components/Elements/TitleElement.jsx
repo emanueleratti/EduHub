@@ -67,9 +67,9 @@ export const TitleElement = ({
 
       {isExpanded && (
         <>
-          <Container className="py-5 d-flex flex-column gap-6">
-            <Row>
-              <Col className="col-4 d-flex flex-column gap-4">
+          <Container className="pt-4 pb-5 d-flex flex-column gap-6">
+            <Row className="gap-5 gap-lg-0">
+              <Col className="col-12 col-lg-4 d-flex flex-column gap-4">
                 <img src={groupImg} width="160px" alt="group" />
                 <p className="black bold">DI GRUPPO</p>
                 <span className="line-small black-bg"></span>
@@ -77,7 +77,7 @@ export const TitleElement = ({
                 <p className="black">{groupPrice}</p>
                 <p className="black">{groupDescription}</p>
               </Col>
-              <Col className="col-4 d-flex flex-column gap-4">
+              <Col className="col-12 col-lg-4 d-flex flex-column gap-4">
                 <img src={singleImg} width="160px" alt="group" />
                 <p className="black bold">SINGOLO UTENTE</p>
                 <span className="line-small black-bg"></span>
@@ -85,7 +85,7 @@ export const TitleElement = ({
                 <p className="black">{singlePrice}</p>
                 <p className="black">{singleDescription}</p>
               </Col>
-              <Col className="col-4 d-flex flex-column gap-4">
+              <Col className="col-12 col-lg-4 d-flex flex-column gap-4">
                 <img src={friendImg} width="160px" alt="group" />
                 <p className="black bold">PORTA UN AMICO</p>
                 <span className="line-small black-bg"></span>
@@ -105,7 +105,7 @@ export const TitleElement = ({
               <Col className="col-12">
                 <p className="black bold">{programListTitle}</p>
               </Col>
-              <Col className="col-4">
+              <Col className="col-12 col-lg-4">
                 <ul className="md d-flex flex-column gap-1 py-2">
                   {createListFromString(programFirstList).map((item, index) => (
                     <li key={index}>
@@ -114,7 +114,7 @@ export const TitleElement = ({
                   ))}
                 </ul>
               </Col>
-              <Col className="col-4">
+              <Col className="col-12 col-lg-4">
                 <ul className="d-flex flex-column gap-1 py-2">
                   {createListFromString(programSecondList).map(
                     (item, index) => (
@@ -125,7 +125,7 @@ export const TitleElement = ({
                   )}
                 </ul>
               </Col>
-              <Col className="col-4">
+              <Col className="col-12 col-lg-4">
                 <ul className="md d-flex flex-column gap-1 py-2">
                   {createListFromString(programThirdList).map((item, index) => (
                     <li key={index}>

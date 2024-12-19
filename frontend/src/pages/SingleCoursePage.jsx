@@ -50,10 +50,14 @@ export const SingleCoursePage = () => {
   return (
     <PageLayout>
       {/* HERO IMAGE */}
-      <Cover height="500px" image={currentCourse?.heroImage} />
+      <Cover
+        mobileHeight="300px"
+        desktopHeight="500px"
+        image={currentCourse?.heroImage}
+      />
       {/* SLOGAN */}
       <Container fluid className="py-6">
-        <Container className="d-flex flex-column gap-6">
+        <Container className="d-flex flex-column gap-5 gap-lg-6">
           <Row>
             <Col className="col-12">
               <h3>
@@ -62,14 +66,14 @@ export const SingleCoursePage = () => {
               </h3>
             </Col>
           </Row>
-          <Row>
-            <Col className="col-9">
+          <Row className="gap-5 gap-lg-0">
+            <Col className="col-12 col-lg-9">
               <p className="lg black">{currentCourse?.description}</p>
             </Col>
-            <Col className="col-3 d-flex flex-column gap-2 align-items-end">
+            <Col className="col-12 col-lg-3 d-flex flex-column gap-2 align-items-start align-items-lg-end">
               <p className="underline bold black">OFFERTA FORMATIVA</p>
               {currentCourse?.levels?.map((level, index) => (
-                <p key={index} className="sm black text-end">
+                <p key={index} className="sm black text-start text-lg-end">
                   {<b>{level?.title.toUpperCase()}</b>}
                   <br />
                   {`SINGOLO ${level?.SINGLE?.price}€ / ${level?.SINGLE?.duration}`}
@@ -84,10 +88,10 @@ export const SingleCoursePage = () => {
         </Container>
       </Container>
       {/* HIGHLIGHTS TEXT */}
-      <Container fluid className="lg-grey-bg py-6">
+      <Container fluid className="lg-grey-bg py-5 py-lg-7">
         <Container>
           <Row>
-            <Col className="col-12 d-flex flex-column gap-4">
+            <Col className="col-12">
               <p className="black lg">{currentCourse?.highlightedText}</p>
             </Col>
           </Row>

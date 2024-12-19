@@ -8,11 +8,13 @@ export const Footer = () => {
   const [categoriesPageData] = useAtom(categoriesPageDataAtom);
 
   return (
-    <Container fluid className="gradient-bg">
-      <Container className="footer d-flex flex-column gap-5">
+    <Container fluid className="gradient-bg py-5 py-lg-6">
+      <Container className="footer d-flex flex-column gap-4 gap-lg-5">
         <Row className="top g-4">
           <Col className="col-12 col-md-7 flex-grow-1 d-flex flex-column gap-2">
-            <div className="logo">Rhinoceros Corsi</div>{" "}
+            <a className="logo" href="/">
+              Rhinoceros Corsi
+            </a>
             <p className="small">
               Rhinoceros Corsi è Centro di Formazione Autorizzato McNeel. Tutti
               i nostri Corsi di Rhinoceros sono certificati da insegnanti ART
@@ -21,7 +23,7 @@ export const Footer = () => {
               nella docenza specialistica, anche a livello universitario.
             </p>
           </Col>
-          <Col className="col-12 col-md-2 offset-md-1 flex-grow-0 d-flex flex-column gap-2">
+          <Col className="col-6 col-md-2 offset-md-1 flex-grow-0 d-flex flex-column gap-2">
             <span className="line white-bg mb-2"></span>
             <h5>Categorie</h5>
             {categoriesPageData
@@ -36,7 +38,7 @@ export const Footer = () => {
                 </a>
               ))}
           </Col>
-          <Col className="col-12 col-md-2 flex-grow-0 d-flex flex-column gap-2">
+          <Col className="col-6 col-md-2 flex-grow-0 d-flex flex-column gap-2">
             <span className="line white-bg mb-2"></span>
             <h5>Contatti</h5>
             <a
@@ -55,7 +57,7 @@ export const Footer = () => {
         </Row>
         <Row className="bottom">
           <span className="line white-bg mb-4"></span>
-          <Col className="col-12 col-md-6 d-flex gap-4">
+          <Col className="col-6 d-flex gap-4">
             <a className="small" href="#">
               Privacy Policy
             </a>
@@ -63,7 +65,7 @@ export const Footer = () => {
               Cookie Policy
             </a>
           </Col>
-          <Col className="col-12 col-md-6 d-flex justify-content-end gap-3">
+          <Col className="col-6 d-flex justify-content-end gap-3">
             <a href="#">
               <i className="ri-facebook-fill icon-xs"></i>
             </a>

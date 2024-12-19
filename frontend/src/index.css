@@ -242,11 +242,23 @@ a:hover {
 .gap-7 {
   gap: 6rem !important;
 }
+.gap-lg-6 {
+  gap: 4.5rem;
+}
+.gap-lg-7 {
+  gap: 6rem;
+}
 .p-6 {
   padding: 4.5rem !important;
 }
 .p-7 {
-  padding: 6rem !important;
+  padding: 6rem;
+}
+.p-lg-6 {
+  padding: 4.5rem;
+}
+.p-lg-7 {
+  padding: 6rem;
 }
 .pb-6 {
   padding-bottom: 4.5rem !important;
@@ -254,10 +266,22 @@ a:hover {
 .pb-7 {
   padding-bottom: 6rem !important;
 }
+.pb-lg-6 {
+  padding-bottom: 4.5rem;
+}
+.pb-lg-7 {
+  padding-bottom: 6rem;
+}
 .pt-6 {
   padding-top: 4.5rem !important;
 }
 .pt-7 {
+  padding-top: 6rem !important;
+}
+.pt-lg-6 {
+  padding-top: 4.5rem !important;
+}
+.pt-lg-7 {
   padding-top: 6rem !important;
 }
 .py-6 {
@@ -268,11 +292,27 @@ a:hover {
   padding-top: 6rem !important;
   padding-bottom: 6rem !important;
 }
+.py-lg-6 {
+  padding-top: 4.5rem !important;
+  padding-bottom: 4.5rem !important;
+}
+.py-lg-7 {
+  padding-top: 6rem !important;
+  padding-bottom: 6rem !important;
+}
 .px-6 {
   padding-left: 4.5rem !important;
   padding-right: 4.5rem !important;
 }
 .px-7 {
+  padding-left: 6rem !important;
+  padding-right: 6rem !important;
+}
+.px-lg-6 {
+  padding-left: 4.5rem !important;
+  padding-right: 4.5rem !important;
+}
+.px-lg-7 {
   padding-left: 6rem !important;
   padding-right: 6rem !important;
 }
@@ -288,4 +328,79 @@ a:hover {
 
 .form-control::placeholder {
   color: var(--grey) !important;
+}
+
+/* MOBILE TYPOGRAPHY */
+@media (max-width: 768px) {
+  /* HEADING */
+  h1 {
+    font-size: 3rem !important;
+    line-height: 3.2rem !important;
+  }
+  h2 {
+    font-size: 3.5rem !important;
+    line-height: 4rem !important;
+  }
+  h3 {
+    font-size: 3rem !important;
+    line-height: 3.5rem !important;
+  }
+  h4 {
+    font-size: 1.4rem !important;
+    line-height: 2.2rem !important;
+  }
+  h5 {
+    font-size: 1rem !important;
+    line-height: 1.2rem !important;
+    font-weight: 300 !important;
+  }
+  h6 {
+    font-size: 1rem !important;
+    line-height: 1.2rem !important;
+  }
+
+  /* BODY */
+  .lg {
+    font-size: 1.4rem !important;
+    line-height: 1.8rem !important;
+  }
+  .md {
+    font-size: 1.2rem !important;
+    line-height: 1.4rem !important;
+  }
+  .sm {
+    font-size: 0.9rem !important;
+    line-height: 1.3rem !important;
+  }
+
+  /* MENU */
+  .menu {
+    font-size: 1rem;
+    line-height: 1.2rem;
+  }
+  .submenu {
+    font-size: 0.8rem;
+    line-height: 1rem;
+  }
+  .logo {
+    font-size: 1.5rem;
+    line-height: 1.8rem;
+  }
+
+  /* SCROLLTEXT */
+  .scrolltext {
+    font-size: 5rem;
+    line-height: 4.8rem;
+  }
+
+  /* ICONS */
+  .icon-lg {
+    font-size: 5rem;
+  }
+  .icon-sm {
+    font-size: 2rem;
+  }
+  .icon-xs {
+    font-size: 1.3rem;
+  }
 }

@@ -19,7 +19,7 @@ export const AboutPage = () => {
       <Container fluid className="bg-black py-6">
         <Container>
           <Row>
-            <Col className="col-12 d-flex flex-column gap-5">
+            <Col className="col-12">
               <h3 className="white">
                 <span className="bold">ARTC</span> Authorized Rhinoceros
                 Training Center
@@ -39,7 +39,11 @@ export const AboutPage = () => {
         </Row>
       </Container>
       {/* ABOUT IMAGE */}
-      <Cover height="500px" image={aboutData?.aboutImage} />
+      <Cover
+        desktopHeight="500px"
+        mobileHeight="300px"
+        image={aboutData?.aboutImage}
+      />
     </PageLayout>
   );
 };

@@ -35,9 +35,9 @@ export const TitleStatic = ({ title, icon }) => {
 
       {isExpanded && (
         <>
-          <Container className="py-5 d-flex flex-column gap-6 row-expanded-static">
-            <Row>
-              <Col className="col-4 d-flex flex-column gap-4">
+          <Container className="pt-4 pb-5 d-flex flex-column gap-5 gap-lg-6 row-expanded-static">
+            <Row className="gap-5 gap-lg-0">
+              <Col className="col-12 col-lg-4 d-flex flex-column gap-4">
                 <img src={festiveImg} width="160px" alt="group" />
                 <p className="black bold">SERALE E FESTIVO</p>
                 <span className="line-small black-bg"></span>
@@ -47,7 +47,7 @@ export const TitleStatic = ({ title, icon }) => {
                 </p>
                 <p className="black bold">SUPPLEMENTO ORARIO 40%</p>
               </Col>
-              <Col className="col-4 d-flex flex-column gap-4">
+              <Col className="col-12 col-lg-4 d-flex flex-column gap-4">
                 <img src={customizedImg} width="160px" alt="group" />
                 <p className="black bold">PERSONALIZZATO</p>
                 <span className="line-small black-bg"></span>

@@ -25,12 +25,16 @@ export const CoursesPage = () => {
   return (
     <PageLayout>
       {/* HERO IMAGE */}
-      <Cover height="500px" image={coursesPageData?.heroImage} />
+      <Cover
+        desktopHeight="500px"
+        mobileHeight="300px"
+        image={coursesPageData?.heroImage}
+      />
       {/* SLOGAN */}
       <Container fluid className="bg-black py-6">
         <Container>
           <Row>
-            <Col className="col-12 d-flex flex-column gap-5">
+            <Col className="col-12">
               <h3 className="white">{coursesPageData?.sloganTitle}</h3>
             </Col>
           </Row>
@@ -39,15 +43,15 @@ export const CoursesPage = () => {
       {/* ICONS */}
       <Container className="pt-6">
         <Row>
-          <Col className="col-4 text-center d-flex flex-column gap-2">
+          <Col className="col-4 text-lg-center d-flex flex-column gap-2">
             <h1 className="black bold">{coursesPageData?.iconFirstNumber}</h1>
             <h4 className="black">{coursesPageData?.iconFirstTitle}</h4>
           </Col>
-          <Col className="col-4 text-center d-flex flex-column gap-2">
+          <Col className="col-4 text-lg-center d-flex flex-column gap-2">
             <h1 className="black bold">{coursesPageData?.iconSecondNumber}</h1>
             <h4 className="black">{coursesPageData?.iconSecondTitle}</h4>
           </Col>
-          <Col className="col-4 text-center d-flex flex-column gap-2">
+          <Col className="col-4 text-lg-center d-flex flex-column gap-2">
             <h1 className="black bold">{coursesPageData?.iconThirdNumber}</h1>
             <h4 className="black">{coursesPageData?.iconThirdTitle}</h4>
           </Col>
@@ -64,7 +68,7 @@ export const CoursesPage = () => {
         </Row>
       </Container>
       {/* CATEGORIES */}
-      <Container className="pb-7 d-flex flex-column">
+      <Container className="pt-3 pb-7 d-flex flex-column">
         {categoriesPageData.map((category, index) => (
           <TitleLink
             key={index}
